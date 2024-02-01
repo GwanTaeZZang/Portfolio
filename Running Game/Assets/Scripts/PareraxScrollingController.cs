@@ -64,10 +64,10 @@ public class PareraxScrollingController : MonoBehaviour
         {
             Transform trans = spriteArr[i].transform;
 
-            trans.Translate(speed * Time.deltaTime * -1, 0, 0);
+            trans.Translate(speed * Time.deltaTime * -0.5f, 0, 0);
             if (trans.position.x < repositionX - biggerObjectXSize)
             {
-                trans.position = new Vector2(moveAmount + trans.position.x, trans.position.y);
+                trans.position = new Vector2(moveAmount + trans.position.x + biggerObjectXSize, trans.position.y);
             }
         }
     }

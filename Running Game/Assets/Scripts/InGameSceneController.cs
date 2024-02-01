@@ -40,7 +40,9 @@ public class InGameSceneController : MonoBehaviour
 
     private void CreateFloor()
     {
+        // Start Floor
         floorList.Add(new Floor(leftFloorPart, middleFloorPart, rightFloorPart, floorParent, true));
+
         for(int i =0; i < FLOOR_CAPICITER; i++)
         {
             floorList.Add(new Floor(leftFloorPart, middleFloorPart, rightFloorPart, floorParent));
@@ -53,12 +55,12 @@ public class InGameSceneController : MonoBehaviour
         {
             if( i == 0)
             {
+                // Start Floor
                 floorList[i].SetFloorPosition(new Vector2(0, -1));
             }
             else
             {
-                float randomY = Random.Range(-2, 2);
-                floorList[i].SetFloorPosition(new Vector2(lastFloor.GetXPos() + (lastFloor.GetFloorWidth() * 0.5f) + 2 + (floorList[i].GetFloorWidth() * 0.5f), randomY));
+                SetRandomFloorPos(floorList[i]);
             }
             lastFloor = floorList[i];
         }
@@ -68,7 +70,28 @@ public class InGameSceneController : MonoBehaviour
         int count = floorList.Count;
         for (int i = 0; i < count; i++)
         {
+            if (!floorList[i].GetFloorVisible())
+            {
+                RePosFloor(floorList[i]);
+
+                floorList[i].SetFloorVisible(true);
+                lastFloor = floorList[i];
+            }
             floorList[i].MoveFloor();
         }
+    }
+    private void RePosFloor(Floor _floor)
+    {
+        float randomWidth = Random.Range(0, 3);
+        _floor.SetFloorSize(new Vector2((int)randomWidth, 1));
+
+        SetRandomFloorPos(_floor);
+    }
+
+    private void SetRandomFloorPos(Floor _floor)
+    {
+        float randomY = Random.Range(-2, 2);
+        _floor.SetFloorPosition(new Vector2(lastFloor.GetXPos() + (lastFloor.GetFloorWidth() * 0.5f) + 2 + (_floor.GetFloorWidth() * 0.5f), randomY));
+
     }
 }
