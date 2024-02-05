@@ -3,6 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+public struct AABB
+{
+    public Vector2 pos;
+    public float width;
+    public float height;
+}
+
 public class Floor
 {
     private const float START_FLOOR_SIZE = 20f;
@@ -48,16 +55,6 @@ public class Floor
 
     public void MoveFloor()
     {
-        //if(floor.position.x + width * 0.5f < repositionX && isMoved)
-        //{
-        //    SetFloorVisible(false);
-        //    isMoved = false;
-        //    return;
-        //}
-        //else if (isMoved)
-        //{
-        //    floor.transform.Translate(Time.deltaTime * moveSpeed * -1, 0, 0);
-        //}
 
         if (floor.position.x + width * 0.5f < repositionX)
         {
@@ -100,6 +97,15 @@ public class Floor
     public float GetXPos()
     {
         return floor.position.x;
+    }
+
+    public AABB GetAABB()
+    {
+        AABB aabb;
+        aabb.pos = floor.position;
+        aabb.width = width;
+        aabb.height = 1; // 지금은 높이가 무조건 1 임시 데이터
+        return aabb;
     }
 
 
