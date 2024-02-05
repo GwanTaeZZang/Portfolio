@@ -5,6 +5,8 @@ using UnityEngine;
 public class InGameSceneController : MonoBehaviour
 {
     private const int FLOOR_CAPICITER = 10;
+    private const int PLAYER_WIDTH = 1;
+    private const int PLAYER_HEIGHT = 1;
 
     [SerializeField] private Transform playerObj;
     [SerializeField] private Transform floorParent;
@@ -126,20 +128,22 @@ public class InGameSceneController : MonoBehaviour
     private void CheckCollisionFloor()
     {
         AABB curFloor = floorList[curFloorIdx].GetAABB();
-        if(curFloor.pos.x - curFloor.width * 0.5f < player.GetPlayerPos().x + 0.5f &&
-            curFloor.pos.x + curFloor.width * 0.5f > player.GetPlayerPos().x - 0.5f &&
-            curFloor.pos.y - curFloor.height * 0.5f < player.GetPlayerPos().y + 0.5f &&
-            curFloor.pos.y + curFloor.height * 0.5f > player.GetPlayerPos().y - 0.5f)
+        if(curFloor.pos.x - curFloor.width * 0.5f < player.GetPlayerPos().x + PLAYER_WIDTH * 0.5f &&
+            curFloor.pos.x + curFloor.width * 0.5f > player.GetPlayerPos().x - PLAYER_WIDTH * 0.5f &&
+            curFloor.pos.y + curFloor.height * 0.4f < player.GetPlayerPos().y - PLAYER_HEIGHT * 0.4f &&
+            curFloor.pos.y + curFloor.height * 0.5f > player.GetPlayerPos().y - PLAYER_HEIGHT * 0.5f)
         {
             //Debug.Log("충돌했쪄" + curFloor.pos.y + curFloor.height);
             player.SetGroundPosY(curFloor.pos.y + curFloor.height);
             player.SetIsGround(true);
             player.PlayerPosYInterpolation(curFloor.pos.y + curFloor.height);
+            Debug.Log("충돌 ");
         }
         else
         {
             player.SetGroundPosY(-30f);
             player.SetIsGround(false);
+            Debug.Log("비 충돌 ");
         }
     }
 }
