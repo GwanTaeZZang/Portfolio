@@ -6,6 +6,7 @@ public class Player
 {
     private const float JUMP_POWER = 0.043f;
     private const float GRAVITY = 0.1f;
+    private const float DOUBLE_JUMP_POWER = 0.8f;
 
     private Transform player;
     private bool isJump;
@@ -22,6 +23,20 @@ public class Player
         curGorundY = 0;
     }
 
+    public void MovePlayer()
+    {
+        if (Input.GetKeyDown("space") && !isJump)
+        {
+            Jump();
+        }
+        else if (Input.GetKeyDown("space") && isJump)
+        {
+            DoubleJump();
+        }
+        Gravity();
+
+    }
+
     public void Jump()
     {
         if (!isJump)
@@ -34,7 +49,7 @@ public class Player
     {
         if (!isDoublejump && isJump)
         {
-            curJumpPower = JUMP_POWER * 0.8f;
+            curJumpPower = JUMP_POWER * DOUBLE_JUMP_POWER;
             isDoublejump = true;
         }
     }
@@ -43,7 +58,10 @@ public class Player
         if (!isGround || isJump)
         {
             curJumpPower -= Time.deltaTime * GRAVITY;
-            player.Translate(0, curJumpPower, 0);
+            Vector2 pos = player.position;
+            pos.y += curJumpPower;
+            player.position = pos;
+            //player.Translate(0, curJumpPower, 0);
             if (player.transform.position.y < curGorundY)
             {
                 isJump = false;
@@ -53,10 +71,10 @@ public class Player
         }
     }
 
-    public bool GetisJump()
-    {
-        return isJump;
-    }
+    //public bool IsJump()
+    //{
+    //    return isJump;
+    //}
 
     private void SetPlayerPosY(float _posY)
     {

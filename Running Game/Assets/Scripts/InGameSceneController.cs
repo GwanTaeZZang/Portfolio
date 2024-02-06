@@ -7,11 +7,21 @@ public class InGameSceneController : MonoBehaviour
     private const int FLOOR_CAPICITER = 10;
     private const int PLAYER_WIDTH = 1;
     private const int PLAYER_HEIGHT = 1;
+    private const float HALF = 0.5f;
+    private const int FLOOR_MIN_WIDTH = 0;
+    private const int FLOOR_MAX_WIDTH = 4;
+    private const int FLOOR_MIN_Y = -2;
+    private const int FLOOR_MAX_Y = 2;
+    private const int FLOOR_BETWEEN_MIN = 2;
+    private const int FLOOR_BETWEEN_MAX = 5;
+    private const float CORRECTION_VALUE = 0.45f;
+    private const float NONE_GROUND_VALUE = -30f;
 
     [SerializeField] private Transform playerObj;
     [SerializeField] private Transform floorParent;
 
     private List<Floor> floorList = new List<Floor>();
+    private int floorListCount;
     //private Floor startFloor;
     private Floor lastFloor;
     private int curFloorIdx;
@@ -39,17 +49,22 @@ public class InGameSceneController : MonoBehaviour
     private void Update()
     {
         //startFloor.MoveFloor();
+
+        //if (Input.GetKeyDown("space") && !player.GetisJump())
+        //{
+        //    player.Jump();
+        //}
+        //else if (Input.GetKeyDown("space") && player.GetisJump())
+        //{
+        //    player.DoubleJump();
+        //}
+        //player.Gravity();
+
+
         MoveFloors();
 
-        if (Input.GetKeyDown("space") && !player.GetisJump())
-        {
-            player.Jump();
-        }
-        else if (Input.GetKeyDown("space") && player.GetisJump())
-        {
-            player.DoubleJump();
-        }
-        player.Gravity();
+        player.MovePlayer();
+
         UpdateCurrentFloor();
         CheckCollisionFloor();
     }
@@ -63,11 +78,13 @@ public class InGameSceneController : MonoBehaviour
         {
             floorList.Add(new Floor(leftFloorPart, middleFloorPart, rightFloorPart, floorParent));
         }
+
+        floorListCount = floorList.Count;
     }
+
     private void SetFloorPosition()
     {
-        int count = floorList.Count;
-        for(int i =0; i < count; i++)
+        for(int i =0; i < floorListCount; i++)
         {
             if( i == 0)
             {
@@ -78,15 +95,16 @@ public class InGameSceneController : MonoBehaviour
             }
             else
             {
+                RePosFloor(floorList[i]);
                 SetRandomFloorPos(floorList[i]);
             }
             lastFloor = floorList[i];
         }
     }
+
     private void MoveFloors()
     {
-        int count = floorList.Count;
-        for (int i = 0; i < count; i++)
+        for (int i = 0; i < floorListCount; i++)
         {
             if (!floorList[i].GetFloorVisible())
             {
@@ -98,52 +116,65 @@ public class InGameSceneController : MonoBehaviour
             floorList[i].MoveFloor();
         }
     }
+
     private void RePosFloor(Floor _floor)
     {
-        float randomWidth = Random.Range(0, 3);
-        _floor.SetFloorSize(new Vector2((int)randomWidth, 1));
+        //float randomWidth = Random.Range(0, 3);
+        _floor.SetFloorSize(new Vector2(GetRandomValue(FLOOR_MIN_WIDTH, FLOOR_MAX_WIDTH), 1));
 
         SetRandomFloorPos(_floor);
     }
 
     private void SetRandomFloorPos(Floor _floor)
     {
-        float randomY = Random.Range(-2, 2);
-        _floor.SetFloorPosition(new Vector2(lastFloor.GetXPos() + (lastFloor.GetFloorWidth() * 0.5f) + 2 + (_floor.GetFloorWidth() * 0.5f), randomY));
+        //float randomY = Random.Range(-2, 2);
+        _floor.SetFloorPosition(
+            new Vector2(
+                lastFloor.GetXPos() + (lastFloor.GetFloorWidth() * HALF) + GetRandomValue(FLOOR_BETWEEN_MIN, FLOOR_BETWEEN_MAX) + (_floor.GetFloorWidth() * HALF),
+                GetRandomValue(FLOOR_MIN_Y, FLOOR_MAX_Y)
+                )
+            );
 
     }
 
     private void UpdateCurrentFloor()
     {
         Floor curFloor = floorList[curFloorIdx];
-        if (player.GetPlayerPos().x -0.5f > curFloor.GetXPos() + (curFloor.GetFloorWidth()*0.5))
+        if (player.GetPlayerPos().x - HALF > curFloor.GetXPos() + (curFloor.GetFloorWidth()* HALF))
         {
             // 현재 플레이어 바로 밑 발판 사라짐
             //Debug.Log(curFloorIdx + "발판 사라짐 ");
             frontFloorIdx++;
-            curFloorIdx = frontFloorIdx % 11;
+            curFloorIdx = frontFloorIdx % floorListCount;
         }
     }
 
     private void CheckCollisionFloor()
     {
         AABB curFloor = floorList[curFloorIdx].GetAABB();
-        if(curFloor.pos.x - curFloor.width * 0.5f < player.GetPlayerPos().x + PLAYER_WIDTH * 0.5f &&
-            curFloor.pos.x + curFloor.width * 0.5f > player.GetPlayerPos().x - PLAYER_WIDTH * 0.5f &&
-            curFloor.pos.y + curFloor.height * 0.4f < player.GetPlayerPos().y - PLAYER_HEIGHT * 0.4f &&
-            curFloor.pos.y + curFloor.height * 0.5f > player.GetPlayerPos().y - PLAYER_HEIGHT * 0.5f)
+        float curFloorPosX = curFloor.pos.x;
+        float curFloorPosY = curFloor.pos.y;
+        float curFloorWidth = curFloor.width;
+        float curFloorHeight = curFloor.height;
+
+        if (curFloorPosX - curFloorWidth * HALF              < player.GetPlayerPos().x + PLAYER_WIDTH * HALF &&
+            curFloorPosX + curFloorWidth * HALF              > player.GetPlayerPos().x - PLAYER_WIDTH * HALF &&
+            curFloorPosY + curFloorHeight * CORRECTION_VALUE < player.GetPlayerPos().y - PLAYER_HEIGHT * CORRECTION_VALUE &&
+            curFloorPosY + curFloorHeight * HALF            >= player.GetPlayerPos().y - PLAYER_HEIGHT * HALF)
         {
-            //Debug.Log("충돌했쪄" + curFloor.pos.y + curFloor.height);
-            player.SetGroundPosY(curFloor.pos.y + curFloor.height);
+            player.SetGroundPosY(curFloorPosY + curFloorHeight);
             player.SetIsGround(true);
-            player.PlayerPosYInterpolation(curFloor.pos.y + curFloor.height);
-            Debug.Log("충돌 ");
+            player.PlayerPosYInterpolation(curFloorPosY + curFloorHeight);
         }
         else
         {
-            player.SetGroundPosY(-30f);
+            player.SetGroundPosY(NONE_GROUND_VALUE);
             player.SetIsGround(false);
-            Debug.Log("비 충돌 ");
         }
+    }
+
+    private int GetRandomValue(int _min, int max)
+    {
+        return Random.Range(_min, max);
     }
 }

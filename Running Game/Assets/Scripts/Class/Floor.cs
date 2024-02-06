@@ -13,6 +13,7 @@ public struct AABB
 public class Floor
 {
     private const float START_FLOOR_SIZE = 20f;
+    private const float HALF = 0.5f;
 
     private Transform floor;
     private SpriteRenderer leftSingleFloor;
@@ -45,8 +46,8 @@ public class Floor
         }
         else
         {
-            float randomWidth = Random.Range(0, 5);
-            middleSingleFloor.size = new Vector2((int)randomWidth, 1);
+            //float randomWidth = Random.Range(0, 5);
+            middleSingleFloor.size = new Vector2(1, 1);
         }
 
         ResetFloorPartsPos();
@@ -56,13 +57,16 @@ public class Floor
     public void MoveFloor()
     {
 
-        if (floor.position.x + width * 0.5f < repositionX)
+        if (floor.position.x + width * HALF < repositionX)
         {
             SetFloorVisible(false);
         }
         else
         {
-            floor.transform.Translate(Time.deltaTime * moveSpeed * -0.5f, 0, 0);
+            Vector2 pos = floor.position;
+            pos.x += Time.deltaTime * moveSpeed * -HALF;
+            floor.position = pos;
+            //floor.transform.Translate(Time.deltaTime * moveSpeed * -0.5f, 0, 0);
         }
 
     }
@@ -111,8 +115,8 @@ public class Floor
 
     private void ResetFloorPartsPos()
     {
-        leftSingleFloor.transform.localPosition = new Vector2(-((middleSingleFloor.size.x * 0.5f) + (leftSingleFloor.size.x * 0.5f)), 0);
-        rightSingleFloor.transform.localPosition = new Vector2((middleSingleFloor.size.x * 0.5f) + (leftSingleFloor.size.x * 0.5f), 0);
+        leftSingleFloor.transform.localPosition = new Vector2(-((middleSingleFloor.size.x * HALF) + (leftSingleFloor.size.x * HALF)), 0);
+        rightSingleFloor.transform.localPosition = new Vector2((middleSingleFloor.size.x * HALF) + (leftSingleFloor.size.x * HALF), 0);
     }
 
     private void SetFloorWidth()

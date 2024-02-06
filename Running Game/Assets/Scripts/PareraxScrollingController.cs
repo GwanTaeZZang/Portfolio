@@ -5,13 +5,15 @@ using UnityEngine.UI;
 
 public class PareraxScrollingController : MonoBehaviour
 {
+    private const float HALF = 0.5f;
+
     private SpriteRenderer[] spriteArr;
     private int count;
     private int speed;
-    private float minXPos;
-    private float maxXPos;
+    private float minPosX;
+    private float maxPosX;
     private float repositionX;
-    private float biggerObjectXSize;
+    private float biggerObjectSizeX;
     private float moveAmount;
     
 
@@ -20,8 +22,8 @@ public class PareraxScrollingController : MonoBehaviour
         spriteArr = transform.GetComponentsInChildren<SpriteRenderer>();
         count = spriteArr.Length;
         speed = spriteArr[0].sortingOrder;
-        minXPos = spriteArr[0].transform.position.x;
-        maxXPos = spriteArr[count-1].transform.position.x;
+        minPosX = spriteArr[0].transform.position.x;
+        maxPosX = spriteArr[count-1].transform.position.x;
         repositionX = Camera.main.ScreenToWorldPoint(new Vector3(0, 0, 0)).x;
 
         //Debug.Log(maxXPos - minXPos);
@@ -33,28 +35,28 @@ public class PareraxScrollingController : MonoBehaviour
         for(int i =0; i < count; i++)
         {
             float xPos = spriteArr[i].transform.position.x;
-            if (xPos > maxXPos)
+            if (xPos > maxPosX)
             {
-                maxXPos = xPos;
+                maxPosX = xPos;
             }
-            if (xPos < minXPos)
+            if (xPos < minPosX)
             {
-                minXPos = xPos;
+                minPosX = xPos;
             }
-            if(biggerObjectXSize < spriteArr[i].sprite.texture.texelSize.x)
+            if(biggerObjectSizeX < spriteArr[i].sprite.texture.texelSize.x)
             {
-                biggerObjectXSize = spriteArr[i].sprite.bounds.size.x * spriteArr[i].transform.localScale.x;
+                biggerObjectSizeX = spriteArr[i].sprite.bounds.size.x * spriteArr[i].transform.localScale.x;
                 //Debug.Log(biggerObjectXSize);
             }
         }
 
-        if(minXPos < 0)
+        if(minPosX < 0)
         {
-            moveAmount = maxXPos - minXPos;
+            moveAmount = maxPosX - minPosX;
         }
-        else if(minXPos >= 0)
+        else if(minPosX >= 0)
         {
-            moveAmount = maxXPos + minXPos;
+            moveAmount = maxPosX + minPosX;
         }
     }
 
@@ -63,11 +65,14 @@ public class PareraxScrollingController : MonoBehaviour
         for(int i =0; i < count; i++)
         {
             Transform trans = spriteArr[i].transform;
+            Vector2 pos = trans.position;
+            pos.x += speed * Time.deltaTime * -HALF;
+            trans.position = pos;
 
-            trans.Translate(speed * Time.deltaTime * -0.5f, 0, 0);
-            if (trans.position.x < repositionX - biggerObjectXSize)
+            //trans.Translate(speed * Time.deltaTime * -0.5f, 0, 0);
+            if (trans.position.x < repositionX - biggerObjectSizeX)
             {
-                trans.position = new Vector2(moveAmount + trans.position.x + biggerObjectXSize, trans.position.y);
+                trans.position = new Vector2(moveAmount + trans.position.x + biggerObjectSizeX, trans.position.y);
             }
         }
     }
