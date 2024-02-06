@@ -88,7 +88,7 @@ public class Floor
         floor.gameObject.SetActive(_visible);
     }
 
-    public bool GetFloorVisible()
+    public bool IsVisible()
     {
         return floor.gameObject.activeSelf;
     }
