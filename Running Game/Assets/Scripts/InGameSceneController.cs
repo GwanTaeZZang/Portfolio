@@ -9,13 +9,14 @@ public class InGameSceneController : MonoBehaviour
     private const int PLAYER_HEIGHT = 1;
     private const float HALF = 0.5f;
     private const int FLOOR_MIN_WIDTH = 0;
-    private const int FLOOR_MAX_WIDTH = 4;
+    private const int FLOOR_MAX_WIDTH = 7;
     private const int FLOOR_MIN_Y = -2;
     private const int FLOOR_MAX_Y = 2;
     private const int FLOOR_BETWEEN_MIN = 2;
     private const int FLOOR_BETWEEN_MAX = 5;
     private const float CORRECTION_VALUE = 0.45f;
     private const float NONE_GROUND_VALUE = -30f;
+    private const float CORRECTION_HALF = 0.4f;
 
     [SerializeField] private Transform playerObj;
     [SerializeField] private Transform floorParent;
@@ -25,12 +26,13 @@ public class InGameSceneController : MonoBehaviour
     private List<Cactus> cactusList = new List<Cactus>();
 
     private int floorListCount;
-    private int cactusListCount;
     //private Floor startFloor;
     private Floor lastFloor;
-    private int curCactusIdx;
-    private int curFloorIdx;
+    private int setCactusIdx;
+    private int collisionCactusIdx;
+    private int collisionFloorIdx;
     private int frontFloorIdx;
+    private int frontCactusIdx;
     private Player player;
     private SpriteRenderer leftFloorPart;
     private SpriteRenderer middleFloorPart;
@@ -64,8 +66,11 @@ public class InGameSceneController : MonoBehaviour
 
         player.MovePlayer();
 
-        UpdateCurrentFloor();
+        UpdateCurrentCollisionFloor();
         CheckCollisionFloor();
+
+        UpdateCurrentCollisionCactus();
+        CheckCollisionCactus();
     }
 
     private void CreateFloor()
@@ -87,6 +92,8 @@ public class InGameSceneController : MonoBehaviour
         {
             cactusList.Add(new Cactus(cactus, cactusParent));
         }
+        frontCactusIdx = 0;
+        collisionCactusIdx = 0;
     }
 
     private void SetFloorPosition()
@@ -98,7 +105,7 @@ public class InGameSceneController : MonoBehaviour
                 // Start Floor
                 floorList[i].SetFloorPosition(new Vector2(0, -1));
                 frontFloorIdx = i;
-                curFloorIdx = i;
+                collisionFloorIdx = i;
             }
             else
             {
@@ -147,30 +154,30 @@ public class InGameSceneController : MonoBehaviour
                 )
             );
 
-
+        SetRandomCactusPos(_floor);
         // Cactus Position Setting
-        AABB aabb = _floor.GetAABB();
-        if(aabb.width > 3)
-        {
-            cactusList[curCactusIdx].SetPosition(_floor);
-            curCactusIdx++;
-            curCactusIdx = curCactusIdx % CAPICITER;
-        }
+        //AABB aabb = _floor.GetAABB();
+        //if(aabb.width > 3)
+        //{
+        //    cactusList[setCactusIdx].SetPosition(_floor);
+        //    setCactusIdx++;
+        //    setCactusIdx = setCactusIdx % CAPICITER;
+        //}
     }
 
-    private void UpdateCurrentFloor()
+    private void UpdateCurrentCollisionFloor()
     {
-        Floor curFloor = floorList[curFloorIdx];
+        Floor curFloor = floorList[collisionFloorIdx];
         if (player.GetPlayerPos().x - HALF > curFloor.GetXPos() + (curFloor.GetFloorWidth()* HALF))
         {
             frontFloorIdx++;
-            curFloorIdx = frontFloorIdx % floorListCount;
+            collisionFloorIdx = frontFloorIdx % floorListCount;
         }
     }
 
     private void CheckCollisionFloor()
     {
-        AABB curFloor = floorList[curFloorIdx].GetAABB();
+        AABB curFloor = floorList[collisionFloorIdx].GetAABB();
         float curFloorPosX = curFloor.pos.x;
         float curFloorPosY = curFloor.pos.y;
         float curFloorWidth = curFloor.width;
@@ -190,6 +197,47 @@ public class InGameSceneController : MonoBehaviour
             player.SetGroundPosY(NONE_GROUND_VALUE);
             player.SetIsGround(false);
         }
+    }
+
+    private void SetRandomCactusPos(Floor _floor)
+    {
+        // Cactus Position Setting
+        AABB aabb = _floor.GetAABB();
+        if (aabb.width > 3)
+        {
+            cactusList[setCactusIdx].SetPosition(_floor);
+            setCactusIdx++;
+            setCactusIdx = setCactusIdx % CAPICITER;
+        }
+    }
+
+    private void UpdateCurrentCollisionCactus()
+    {
+        Cactus curCactus = cactusList[collisionCactusIdx];
+        if (player.GetPlayerPos().x - HALF > curCactus.GetPos().x + (curCactus.GetCactusWidth() * HALF))
+        {
+            frontCactusIdx++;
+            collisionCactusIdx = frontCactusIdx % CAPICITER;
+        }
+
+    }
+
+    private void CheckCollisionCactus()
+    {
+        AABB curCactus = cactusList[collisionCactusIdx].GetCactusAABB();
+        float cactusPosX = curCactus.pos.x;
+        float cactusPosY = curCactus.pos.y;
+        float cactusWidth = curCactus.width;
+        float cactusHeight = curCactus.height;
+
+        if(cactusPosX - cactusWidth * CORRECTION_HALF < player.GetPlayerPos().x + PLAYER_WIDTH * CORRECTION_HALF &&
+            cactusPosX + cactusWidth * CORRECTION_HALF > player.GetPlayerPos().x - PLAYER_WIDTH * CORRECTION_HALF &&
+            cactusPosY - cactusHeight * CORRECTION_HALF < player.GetPlayerPos().y + PLAYER_HEIGHT * CORRECTION_HALF &&
+            cactusPosY + cactusHeight * CORRECTION_HALF > player.GetPlayerPos().y - PLAYER_HEIGHT * CORRECTION_HALF)
+        {
+            Debug.Log("Collision~~~~~~~~~~~");
+        }
+
     }
 
     private int GetRandomValue(int _min, int max)
