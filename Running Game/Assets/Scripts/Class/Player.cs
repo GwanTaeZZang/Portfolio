@@ -11,19 +11,22 @@ public enum PlayerState
 
 public class Player
 {
-    private const float JUMP_POWER = 0.043f;
+    private const float JUMP_POWER = 0.047f;
     private const float GRAVITY = 0.1f;
     private const float DOUBLE_JUMP_POWER = 0.8f;
 
     private Transform player;
+
     private bool isJump;
     private bool isDoublejump;
     private bool isGround;
     private float curJumpPower;
     private float curGorundY;
     private float playerInterpolationY;
+
     private Animator anim;
     private PlayerState playerState;
+    private Vector2 curPos;
 
     public Player(Transform _player)
     {
@@ -33,6 +36,7 @@ public class Player
         isJump = false;
         isDoublejump = false;
         curGorundY = 0;
+        curPos = player.position;
         //ChangePlayerAnimation(PlayerState.Walk);
     }
 
@@ -76,9 +80,9 @@ public class Player
         if (!isGround || isJump)
         {
             curJumpPower -= Time.deltaTime * GRAVITY;
-            Vector2 pos = player.position;
-            pos.y += curJumpPower;
-            player.position = pos;
+            //Vector2 pos = player.position;
+            curPos.y += curJumpPower;
+            player.position = curPos;
 
             if(curJumpPower < 0)
             {
@@ -86,12 +90,14 @@ public class Player
             }
 
             //player.Translate(0, curJumpPower, 0);
-            if (player.transform.position.y < curGorundY)
+            if (curPos.y < curGorundY)
             {
                 ChangePlayerAnimation(PlayerState.Walk);
                 isJump = false;
                 isDoublejump = false;
-                player.transform.position = new Vector2(player.transform.position.x, curGorundY);
+                curPos.y = curGorundY;
+                player.transform.position = curPos;
+                curJumpPower = 0;
             }
         }
     }
@@ -103,7 +109,8 @@ public class Player
 
     private void SetPlayerPosY(float _posY)
     {
-        player.position = new Vector2(player.position.x, _posY);
+        curPos.y = _posY;
+        player.position = curPos;
     }
 
     private void ChangePlayerAnimation(PlayerState _state)
@@ -118,7 +125,7 @@ public class Player
 
     public Vector2 GetPlayerPos()
     {
-        return player.position;
+        return curPos;
     }
 
     public void SetGroundPosY(float _groundY)

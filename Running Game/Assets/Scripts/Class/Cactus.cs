@@ -2,73 +2,75 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Cactus
+//.. TODO :: baseclass -> ObstacleClass
+public class Cactus : Obstacle
 {
-    private const float HALF = 0.5f;
-    private const int SPRITE_RANDOM_MIN = 0;
-    private const int SPRITE_RANDOM_MAX = 3;
-    private const int CACTUS_CORRECTION_POS_MIN = 2;
-    private const int CACTUS_CORRECTION_POS_MAX = -1;
-    private const int CACTUS_C_FLOOR_MINIMUM = 6;
-    private const int CREATE_POS_X = -5;
-    private const int CREATE_POS_Y = -5;
-
-    private Transform cactus;
     private SpriteRenderer cactusRenderer;
     private Sprite[] cactusSpriteArr;
-    private float width;
-    private float height;
-    private float speed;
-    private float repositionX;
 
-
-    public Cactus(SpriteRenderer _cactus, Transform _cactusGroup)
+    public override void Initialized(SpriteRenderer _obstacle, Transform _parent, float _rePosX)
     {
-        cactusRenderer = GameObject.Instantiate<SpriteRenderer>(_cactus, _cactusGroup);
-        cactus = cactusRenderer.transform;
-        cactus.position = new Vector2(CREATE_POS_X, CREATE_POS_Y);
+
+        cactusRenderer = GameObject.Instantiate<SpriteRenderer>(_obstacle, _parent);
+        obstacle = cactusRenderer.transform;
+        obstacle.position = new Vector2(CREATE_POS_X, CREATE_POS_Y);
 
         cactusSpriteArr = new Sprite[] { Resources.Load<Sprite>("Prefab/Sprite/Cactus/Cactus A"),
                                          Resources.Load<Sprite>("Prefab/Sprite/Cactus/Cactus B"),
                                          Resources.Load<Sprite>("Prefab/Sprite/Cactus/Cactus C")};
         speed = cactusRenderer.sortingOrder;
-        repositionX = Camera.main.ScreenToWorldPoint(new Vector3(0, 0, 0)).x;
-        SetVisible(false);
-        }
+        repositionX = _rePosX;
 
-    public void MoveCactus()
+        SetVisible(false);
+    }
+
+    public override void Move()
     {
-        if(cactus.position.x + width * HALF < repositionX)
+        if (obstacle.position.x + width * HALF < repositionX)
         {
             SetVisible(false);
         }
         else
         {
-            Vector2 pos = cactus.position;
+            Vector2 pos = obstacle.position;
             pos.x += Time.deltaTime * speed * -HALF;
-            cactus.position = pos;
+            obstacle.position = pos;
         }
     }
 
-    public Vector2 GetPos()
-    {
-        return cactus.position;
-    }
+    //public void MoveCactus()
+    //{
+    //    if(obstacle.position.x + width * HALF < repositionX)
+    //    {
+    //        SetVisible(false);
+    //    }
+    //    else
+    //    {
+    //        Vector2 pos = obstacle.position;
+    //        pos.x += Time.deltaTime * speed * -HALF;
+    //        obstacle.position = pos;
+    //    }
+    //}
 
-    public float GetCactusWidth()
-    {
-        return width;
-    }
+    //public Vector2 GetPos()
+    //{
+    //    return obstacle.position;
+    //}
 
-    public AABB GetCactusAABB()
-    {
-        AABB aabb;
-        aabb.pos = cactus.position;
-        aabb.width = width;
-        aabb.height = height;
+    //public float GetWidth()
+    //{
+    //    return width;
+    //}
 
-        return aabb;
-    }
+    //public AABB GetCactusAABB()
+    //{
+    //    AABB aabb;
+    //    aabb.pos = obstacle.position;
+    //    aabb.width = width;
+    //    aabb.height = height;
+
+    //    return aabb;
+    //}
 
     //private void SetWidth(float _width)
     //{
@@ -80,12 +82,20 @@ public class Cactus
     //    height = _height;
     //}
 
-    public void SetVisible(bool _visible)
+
+    //public bool SetPosition(Floor _floor)
+    //{
+    //}
+
+    private void ChangeRandomSprite()
     {
-        cactus.gameObject.SetActive(_visible);
+        //int random = Random.Range(0, 4);
+        cactusRenderer.sprite = cactusSpriteArr[GetRandomValue(SPRITE_RANDOM_MIN, SPRITE_RANDOM_MAX)];
     }
 
-    public void SetPosition(Floor _floor)
+
+
+    public override bool SetPosition(Floor _floor)
     {
         ChangeRandomSprite();
         width = cactusRenderer.bounds.size.x;
@@ -95,27 +105,21 @@ public class Cactus
 
         AABB aabb = _floor.GetAABB();
 
-        if(cactusRenderer.sprite.name == "Cactus C" && aabb.width < CACTUS_C_FLOOR_MINIMUM)
+        if (cactusRenderer.sprite.name == "Cactus C" && aabb.width < CACTUS_C_FLOOR_MINIMUM)
         {
-            return;
+            return false;
         }
 
-        Vector2 pos = cactus.position;
-        pos.x = GetRandomValue((aabb.pos.x + aabb.width * -HALF) + width * HALF + CACTUS_CORRECTION_POS_MIN, (aabb.pos.x + aabb.width * HALF) - width * HALF + CACTUS_CORRECTION_POS_MAX);
+        Vector2 pos = obstacle.position;
+        float rndMinX = (aabb.pos.x + aabb.width * -HALF) + width * HALF + CACTUS_CORRECTION_POS_MIN;
+        float rndMaxX = (aabb.pos.x + aabb.width * HALF) - width * HALF + CACTUS_CORRECTION_POS_MAX;
+        pos.x = GetRandomValue(rndMinX, rndMaxX);
         pos.y = (aabb.pos.y + aabb.height * HALF) + height * HALF;
-        cactus.position = pos;
+        obstacle.position = pos;
 
         SetVisible(true);
+        return true;
+
     }
 
-    private void ChangeRandomSprite()
-    {
-        //int random = Random.Range(0, 4);
-        cactusRenderer.sprite = cactusSpriteArr[GetRandomValue(SPRITE_RANDOM_MIN, SPRITE_RANDOM_MAX)];
-    }
-
-    private int GetRandomValue(float _min, float _max)
-    {
-        return (int)Random.Range(_min, _max);
-    }
 }

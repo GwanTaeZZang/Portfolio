@@ -15,7 +15,6 @@ public class PareraxScrollingController : MonoBehaviour
     private float repositionX;
     private float biggerObjectSizeX;
     private float moveAmount;
-    
 
     private void Awake()
     {
@@ -32,7 +31,7 @@ public class PareraxScrollingController : MonoBehaviour
 
     private void Start()
     {
-        for(int i =0; i < count; i++)
+        for(int i = 0; i < count; i++)
         {
             float xPos = spriteArr[i].transform.position.x;
             if (xPos > maxPosX)
