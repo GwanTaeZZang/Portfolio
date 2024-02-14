@@ -7,7 +7,8 @@ public class ObstacleController
     private const int CAPACITY = 10;
     private const float CORRECTION_HALF = 0.4f;
     private const float HALF = 0.5f;
-
+    private const int INIT_CACTUS_DIX = 0;
+    private const int INIT_JUMPDINO_DIX = 10;
 
     private List<Obstacle> obstacleList;
     private SpriteRenderer cactus;
@@ -18,7 +19,8 @@ public class ObstacleController
     private int setCactusIdx;
     private int setDinoIdx;
     private int collisionCactusIdx;
-    private int frontCactusIdx;
+    private int collisionJumpDinoIdx;
+    //private int frontCactusIdx;
     private float repositionX;
 
     private Camera camera;
@@ -39,19 +41,26 @@ public class ObstacleController
 
         count = obstacleList.Count;
 
-        setCactusIdx = 0;
-        setDinoIdx = 10;
+        setCactusIdx = INIT_CACTUS_DIX;
+        setDinoIdx = INIT_JUMPDINO_DIX;
+        collisionCactusIdx = INIT_CACTUS_DIX;
+        collisionJumpDinoIdx = INIT_JUMPDINO_DIX;
+
         //Debug.Log(count);
     }
 
     public void ObstacleUpdate()
     {
         MoveObstacle();
-        UpdateCurrentCollisionObstacle();
-        CheckCollisionObstacle();
+        UpdateCurrentCollisionCactus();
+        CheckCollisionObstacle(collisionCactusIdx);
+        UpdateCurrentCollisionJumpDino();
+        CheckCollisionObstacle(collisionJumpDinoIdx);
+
+        //CheckCollisionJumpDino();
     }
 
-    private void CreateObstacle<T>(SpriteRenderer _obstacle ,Transform _parent, float _reposX) where T : Obstacle, new()
+    private void CreateObstacle<T>(SpriteRenderer _obstacle, Transform _parent, float _reposX) where T : Obstacle, new()
     {
         for (int i = 0; i < CAPACITY; i++)
         {
@@ -59,8 +68,7 @@ public class ObstacleController
             obstacle.Initialized(_obstacle, _parent, _reposX);
             obstacleList.Add(obstacle);
         }
-        frontCactusIdx = 0;
-        collisionCactusIdx = 0;
+        //frontCactusIdx = 0;
     }
 
 
@@ -84,7 +92,7 @@ public class ObstacleController
 
     public void SetRandomDinoPos(Floor _floor)
     {
-        if(_floor.GetBetween() > 3)
+        if (_floor.GetBetween() > 3)
         {
             //Debug.Log(_floor.GetBetween());
 
@@ -109,28 +117,40 @@ public class ObstacleController
         }
     }
 
-    private void UpdateCurrentCollisionObstacle()
+    private void UpdateCurrentCollisionCactus()
     {
         Obstacle curCactus = obstacleList[collisionCactusIdx];
         if (player.GetPlayerPos().x - HALF > curCactus.GetPos().x + (curCactus.GetWidth() * HALF))
         {
-            frontCactusIdx++;
-            collisionCactusIdx = frontCactusIdx % CAPACITY;
+            collisionCactusIdx++;
+            collisionCactusIdx = collisionCactusIdx % CAPACITY;
         }
     }
 
-    private void CheckCollisionObstacle()
+    private void UpdateCurrentCollisionJumpDino()
     {
-        AABB curCactus = obstacleList[collisionCactusIdx].GetAABB();
-        float cactusPosX = curCactus.pos.x;
-        float cactusPosY = curCactus.pos.y;
-        float cactusWidth = curCactus.width;
-        float cactusHeight = curCactus.height;
+        Obstacle curJumpDino = obstacleList[collisionJumpDinoIdx];
+        if (player.GetPlayerPos().x - HALF > curJumpDino.GetPos().x + (curJumpDino.GetWidth() * HALF))
+        {
+            collisionJumpDinoIdx++;
+            collisionJumpDinoIdx = (collisionJumpDinoIdx % CAPACITY) + CAPACITY;
 
-        if (cactusPosX - cactusWidth * CORRECTION_HALF < player.GetPlayerPos().x + CORRECTION_HALF &&
-            cactusPosX + cactusWidth * CORRECTION_HALF > player.GetPlayerPos().x - CORRECTION_HALF &&
-            cactusPosY - cactusHeight * CORRECTION_HALF < player.GetPlayerPos().y + CORRECTION_HALF &&
-            cactusPosY + cactusHeight * CORRECTION_HALF > player.GetPlayerPos().y - CORRECTION_HALF)
+        }
+
+    }
+
+    private void CheckCollisionObstacle(int _obstacleIdx)
+    {
+        AABB curObstacle = obstacleList[_obstacleIdx].GetAABB();
+        float obstaclePosX = curObstacle.pos.x;
+        float obstaclePosY = curObstacle.pos.y;
+        float obstacleWidth = curObstacle.width;
+        float obstacleHeight = curObstacle.height;
+
+        if (obstaclePosX - obstacleWidth * CORRECTION_HALF < player.GetPlayerPos().x + CORRECTION_HALF &&
+            obstaclePosX + obstacleWidth * CORRECTION_HALF > player.GetPlayerPos().x - CORRECTION_HALF &&
+            obstaclePosY - obstacleHeight * CORRECTION_HALF < player.GetPlayerPos().y + CORRECTION_HALF &&
+            obstaclePosY + obstacleHeight * CORRECTION_HALF > player.GetPlayerPos().y - CORRECTION_HALF)
         {
             Debug.Log("Collision~~~~~~~~~~~");
         }
@@ -138,4 +158,21 @@ public class ObstacleController
     }
 
 
+    //private void CheckCollisionJumpDino()
+    //{
+    //    AABB curJumpDino = obstacleList[collisionJumpDinoIdx].GetAABB();
+    //    float jumpDinoPosX = curJumpDino.pos.x;
+    //    float jumpDinoPosY = curJumpDino.pos.y;
+    //    float jumpDinoWidth = curJumpDino.width;
+    //    float jumpDinoHeight = curJumpDino.height;
+
+    //    if (jumpDinoPosX - jumpDinoWidth * CORRECTION_HALF < player.GetPlayerPos().x + CORRECTION_HALF &&
+    //        jumpDinoPosX + jumpDinoWidth * CORRECTION_HALF > player.GetPlayerPos().x - CORRECTION_HALF &&
+    //        jumpDinoPosY - jumpDinoHeight * CORRECTION_HALF < player.GetPlayerPos().y + CORRECTION_HALF &&
+    //        jumpDinoPosY + jumpDinoHeight * CORRECTION_HALF > player.GetPlayerPos().y - CORRECTION_HALF)
+    //    {
+    //        Debug.Log("JumpDino Collision~~~~~~~~~~~");
+
+    //    }
+    //}
 }

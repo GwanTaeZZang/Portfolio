@@ -13,6 +13,7 @@ public class JumpDino : Obstacle
     private float curJumpPower;
     private bool isJump;
     private Vector2 jumpDinoPos;
+    
 
     public override void Initialized(SpriteRenderer _obstacle, Transform _parent, float _rePosX)
     {
@@ -66,7 +67,7 @@ public class JumpDino : Obstacle
         float posX = aabb.pos.x - (aabb.width * 0.5f) - (_floor.GetBetween() * 0.5f);
 
         jumpDinoPos.x = posX;
-        jumpDinoPos.y = REJUMP_POS_Y;
+        jumpDinoPos.y = GetRandomValue(-4 , 3);
 
         obstacle.position = jumpDinoPos;
 
