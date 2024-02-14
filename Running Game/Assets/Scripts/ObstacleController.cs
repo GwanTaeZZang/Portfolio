@@ -7,19 +7,23 @@ public class ObstacleController
     private const int CAPACITY = 10;
     private const float CORRECTION_HALF = 0.4f;
     private const float HALF = 0.5f;
-    private const int INIT_CACTUS_DIX = 0;
-    private const int INIT_JUMPDINO_DIX = 10;
+    private const int INIT_CACTUS_IDX = 0;
+    private const int INIT_JUMPDINO_IDX = 10;
+    private const int INIT_ARROW_IDX = 20;
 
     private List<Obstacle> obstacleList;
     private SpriteRenderer cactus;
     private SpriteRenderer dino;
+    private SpriteRenderer arrow;
     private Player player;
 
     private int count;
     private int setCactusIdx;
-    private int setDinoIdx;
+    private int setJumpDinoIdx;
+    private int setArrowIdx;
     private int collisionCactusIdx;
     private int collisionJumpDinoIdx;
+    private int collisionArrowIdx;
     //private int frontCactusIdx;
     private float repositionX;
 
@@ -31,6 +35,7 @@ public class ObstacleController
 
         cactus = Resources.Load<SpriteRenderer>("Prefab/Obstacle/Cactus/Cactus");
         dino = Resources.Load<SpriteRenderer>("Prefab/Obstacle/Dino/Dino");
+        arrow = Resources.Load<SpriteRenderer>("Prefab/Obstacle/Arrow/Arrow");
 
         obstacleList = new List<Obstacle>();
         player = _player;
@@ -38,13 +43,16 @@ public class ObstacleController
 
         CreateObstacle<Cactus>(cactus, _parent, repositionX);
         CreateObstacle<JumpDino>(dino, _parent, repositionX);
+        CreateObstacle<Arrow>(arrow, _parent, repositionX);
 
         count = obstacleList.Count;
 
-        setCactusIdx = INIT_CACTUS_DIX;
-        setDinoIdx = INIT_JUMPDINO_DIX;
-        collisionCactusIdx = INIT_CACTUS_DIX;
-        collisionJumpDinoIdx = INIT_JUMPDINO_DIX;
+        setCactusIdx = INIT_CACTUS_IDX;
+        setJumpDinoIdx = INIT_JUMPDINO_IDX;
+        setArrowIdx = INIT_ARROW_IDX;
+        collisionCactusIdx = INIT_CACTUS_IDX;
+        collisionJumpDinoIdx = INIT_JUMPDINO_IDX;
+        collisionArrowIdx = INIT_ARROW_IDX;
 
         //Debug.Log(count);
     }
@@ -56,8 +64,17 @@ public class ObstacleController
         CheckCollisionObstacle(collisionCactusIdx);
         UpdateCurrentCollisionJumpDino();
         CheckCollisionObstacle(collisionJumpDinoIdx);
+        UpdateCurrentCollisionArrow();
+        CheckCollisionObstacle(collisionArrowIdx);
+
 
         //CheckCollisionJumpDino();
+    }
+    public void SetRandomObstaclePos(Floor _floor)
+    {
+        SetRandomCactusPos(_floor);
+        SetRandomJumpDinoPos(_floor);
+        SetRandomArrowPos(_floor);
     }
 
     private void CreateObstacle<T>(SpriteRenderer _obstacle, Transform _parent, float _reposX) where T : Obstacle, new()
@@ -71,9 +88,25 @@ public class ObstacleController
         //frontCactusIdx = 0;
     }
 
+    private void MoveObstacle()
+    {
+        for (int i = 0; i < count; i++)
+        {
+            obstacleList[i].Move();
+        }
+    }
 
 
-    public void SetRandomCactusPos(Floor _floor)
+
+
+
+
+
+
+
+
+
+    private void SetRandomCactusPos(Floor _floor)
     {
         // Cactus Position Setting
         AABB aabb = _floor.GetAABB();
@@ -90,32 +123,40 @@ public class ObstacleController
         }
     }
 
-    public void SetRandomDinoPos(Floor _floor)
+    private void SetRandomJumpDinoPos(Floor _floor)
     {
         if (_floor.GetBetween() > 3)
         {
             //Debug.Log(_floor.GetBetween());
 
-            bool isSet = obstacleList[setDinoIdx].SetPosition(_floor);
+            bool isSet = obstacleList[setJumpDinoIdx].SetPosition(_floor);
             if (isSet)
             {
                 //Debug.Log("세팅된 공룡 인덱스" + setDinoIdx);
 
-                setDinoIdx++;
-                setDinoIdx = (setDinoIdx % CAPACITY) + CAPACITY;
+                setJumpDinoIdx++;
+                setJumpDinoIdx = (setJumpDinoIdx % CAPACITY) + INIT_JUMPDINO_IDX;
             }
         }
     }
 
-
-
-    private void MoveObstacle()
+    private void SetRandomArrowPos(Floor _floor)
     {
-        for (int i = 0; i < count; i++)
+        bool isSet = obstacleList[setArrowIdx].SetPosition(_floor);
+        if (isSet)
         {
-            obstacleList[i].Move();
+            setArrowIdx++;
+            setArrowIdx = (setArrowIdx % CAPACITY) + INIT_ARROW_IDX;
         }
     }
+
+
+
+
+
+
+
+
 
     private void UpdateCurrentCollisionCactus()
     {
@@ -137,6 +178,17 @@ public class ObstacleController
 
         }
 
+    }
+
+    private void UpdateCurrentCollisionArrow()
+    {
+        Obstacle curArrow = obstacleList[collisionArrowIdx];
+        if (player.GetPlayerPos().x - HALF > curArrow.GetPos().x + (curArrow.GetWidth() * HALF))
+        {
+            collisionArrowIdx++;
+            collisionArrowIdx = (collisionArrowIdx % CAPACITY) + INIT_ARROW_IDX;
+
+        }
     }
 
     private void CheckCollisionObstacle(int _obstacleIdx)

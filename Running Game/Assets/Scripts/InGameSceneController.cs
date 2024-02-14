@@ -162,8 +162,10 @@ public class InGameSceneController : MonoBehaviour
         _floor.SetBetween(betweenX);
 
 
-        obstacleCtrl.SetRandomCactusPos(_floor);
-        obstacleCtrl.SetRandomDinoPos(_floor);
+        //obstacleCtrl.SetRandomCactusPos(_floor);
+        //obstacleCtrl.SetRandomJumpDinoPos(_floor);
+        //obstacleCtrl.SetRandomArrowPos(_floor);
+        obstacleCtrl.SetRandomObstaclePos(_floor);
         //SetRandomCactusPos(_floor);
     }
 
