@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class JumpDino : Obstacle
 {
-    private const float JUMP_POWER = 0.04f;
+    private const float JUMP_POWER = 0.043f;
     private const float GRAVITY = 0.03f;
-    private const int REJUMP_POS_Y = -4;
+    private const int REJUMP_POS_Y = -6;
 
     private SpriteRenderer jumpDinoRenderer;
 
@@ -67,7 +67,7 @@ public class JumpDino : Obstacle
         float posX = aabb.pos.x - (aabb.width * 0.5f) - (_floor.GetBetween() * 0.5f);
 
         jumpDinoPos.x = posX;
-        jumpDinoPos.y = GetRandomValue(-4 , 3);
+        jumpDinoPos.y = GetRandomValue(-6 , -3);
 
         obstacle.position = jumpDinoPos;
 

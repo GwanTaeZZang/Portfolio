@@ -7,9 +7,9 @@ public class ObstacleController
     private const int CAPACITY = 10;
     private const float CORRECTION_HALF = 0.4f;
     private const float HALF = 0.5f;
-    private const int INIT_CACTUS_IDX = 0;
-    private const int INIT_JUMPDINO_IDX = 10;
-    private const int INIT_ARROW_IDX = 20;
+    private const int INIT_CACTUS_IDX = CAPACITY * 0;
+    private const int INIT_JUMPDINO_IDX = CAPACITY * 1;
+    private const int INIT_ARROW_IDX = CAPACITY * 2;
 
     private List<Obstacle> obstacleList;
     private SpriteRenderer cactus;
@@ -25,13 +25,13 @@ public class ObstacleController
     private int collisionJumpDinoIdx;
     private int collisionArrowIdx;
     //private int frontCactusIdx;
-    private float repositionX;
+    //private float repositionX;
 
-    private Camera camera;
+    //private Camera camera;
 
-    public ObstacleController(Transform _parent, Player _player)
+    public ObstacleController(Transform _parent, Player _player , float _reposX)
     {
-        camera = Camera.main;
+        //camera = Camera.main;
 
         cactus = Resources.Load<SpriteRenderer>("Prefab/Obstacle/Cactus/Cactus");
         dino = Resources.Load<SpriteRenderer>("Prefab/Obstacle/Dino/Dino");
@@ -39,11 +39,11 @@ public class ObstacleController
 
         obstacleList = new List<Obstacle>();
         player = _player;
-        repositionX = camera.ScreenToWorldPoint(new Vector3(0, 0, 0)).x;
+        //repositionX = camera.ScreenToWorldPoint(new Vector3(0, 0, 0)).x;
 
-        CreateObstacle<Cactus>(cactus, _parent, repositionX);
-        CreateObstacle<JumpDino>(dino, _parent, repositionX);
-        CreateObstacle<Arrow>(arrow, _parent, repositionX);
+        CreateObstacle<Cactus>(cactus, _parent, _reposX);
+        CreateObstacle<JumpDino>(dino, _parent, _reposX);
+        CreateObstacle<Arrow>(arrow, _parent, _reposX);
 
         count = obstacleList.Count;
 
@@ -62,8 +62,10 @@ public class ObstacleController
         MoveObstacle();
         UpdateCurrentCollisionCactus();
         CheckCollisionObstacle(collisionCactusIdx);
+
         UpdateCurrentCollisionJumpDino();
         CheckCollisionObstacle(collisionJumpDinoIdx);
+
         UpdateCurrentCollisionArrow();
         CheckCollisionObstacle(collisionArrowIdx);
 
@@ -105,12 +107,12 @@ public class ObstacleController
 
 
 
-
+    // Oabstacles reposition Method
     private void SetRandomCactusPos(Floor _floor)
     {
         // Cactus Position Setting
         AABB aabb = _floor.GetAABB();
-        if (aabb.width > 3)
+        if (aabb.width > 6)
         {
             bool isSet = obstacleList[setCactusIdx].SetPosition(_floor);
             if (isSet)
@@ -122,10 +124,9 @@ public class ObstacleController
             }
         }
     }
-
     private void SetRandomJumpDinoPos(Floor _floor)
     {
-        if (_floor.GetBetween() > 3)
+        if (_floor.GetBetween() < 4)
         {
             //Debug.Log(_floor.GetBetween());
 
@@ -139,7 +140,6 @@ public class ObstacleController
             }
         }
     }
-
     private void SetRandomArrowPos(Floor _floor)
     {
         bool isSet = obstacleList[setArrowIdx].SetPosition(_floor);
@@ -157,7 +157,7 @@ public class ObstacleController
 
 
 
-
+    // Obstacles Collision Method
     private void UpdateCurrentCollisionCactus()
     {
         Obstacle curCactus = obstacleList[collisionCactusIdx];

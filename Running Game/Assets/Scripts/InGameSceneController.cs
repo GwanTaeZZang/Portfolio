@@ -8,8 +8,8 @@ public class InGameSceneController : MonoBehaviour
     private const int PLAYER_WIDTH = 1;
     private const int PLAYER_HEIGHT = 1;
     private const float HALF = 0.5f;
-    private const int FLOOR_MIN_WIDTH = 0;
-    private const int FLOOR_MAX_WIDTH = 7;
+    private const int FLOOR_MIN_WIDTH = 4;
+    private const int FLOOR_MAX_WIDTH = 9;
     private const int FLOOR_MIN_Y = -2;
     private const int FLOOR_MAX_Y = 2;
     private const int FLOOR_BETWEEN_MIN = 2;
@@ -20,11 +20,13 @@ public class InGameSceneController : MonoBehaviour
 
     [SerializeField] private Transform playerObj;
     [SerializeField] private Transform floorParent;
-    [SerializeField] private Transform cactusParent;
+    [SerializeField] private Transform obstacleParent;
+    [SerializeField] private Transform coinParent;
 
     private List<Floor> floorList = new List<Floor>(); //.. TODO :: FloorController
     //private List<Cactus> cactusList = new List<Cactus>(); //.. TODO :: ObstacleController
     private ObstacleController obstacleCtrl;
+    private CoinController coinCtrl;
 
     private int floorListCount;
     //private Floor startFloor;
@@ -42,8 +44,12 @@ public class InGameSceneController : MonoBehaviour
     private SpriteRenderer rightFloorPart;
     //private SpriteRenderer cactus;
 
+    private float repositionX;
+
     private void Awake()
     {
+        repositionX = Camera.main.ScreenToWorldPoint(new Vector3(0, 0, 0)).x;
+
         leftFloorPart = Resources.Load<SpriteRenderer>("Prefab/Floor/Single Left");
         middleFloorPart = Resources.Load<SpriteRenderer>("Prefab/Floor/Single Middle");
         rightFloorPart = Resources.Load<SpriteRenderer>("Prefab/Floor/Single Right");
@@ -52,7 +58,8 @@ public class InGameSceneController : MonoBehaviour
         player = new Player(playerObj);
         //startFloor = new Floor(leftFloorPart, middleFloorPart, rightFloorPart, floorParent, true);
 
-        obstacleCtrl = new ObstacleController(cactusParent, player);
+        obstacleCtrl = new ObstacleController(obstacleParent, player, repositionX);
+        coinCtrl = new CoinController(coinParent, player, repositionX);
     }
 
     private void Start()

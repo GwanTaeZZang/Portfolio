@@ -105,10 +105,10 @@ public class Cactus : Obstacle
 
         AABB aabb = _floor.GetAABB();
 
-        if (cactusRenderer.sprite.name == "Cactus C" && aabb.width < CACTUS_C_FLOOR_MINIMUM)
-        {
-            return false;
-        }
+        //if (cactusRenderer.sprite.name == "Cactus C" && aabb.width < CACTUS_C_FLOOR_MINIMUM)
+        //{
+        //    return false;
+        //}
 
         Vector2 pos = obstacle.position;
         float rndMinX = (aabb.pos.x + aabb.width * -HALF) + width * HALF + CACTUS_CORRECTION_POS_MIN;
