@@ -209,22 +209,4 @@ public class ObstacleController
 
     }
 
-
-    //private void CheckCollisionJumpDino()
-    //{
-    //    AABB curJumpDino = obstacleList[collisionJumpDinoIdx].GetAABB();
-    //    float jumpDinoPosX = curJumpDino.pos.x;
-    //    float jumpDinoPosY = curJumpDino.pos.y;
-    //    float jumpDinoWidth = curJumpDino.width;
-    //    float jumpDinoHeight = curJumpDino.height;
-
-    //    if (jumpDinoPosX - jumpDinoWidth * CORRECTION_HALF < player.GetPlayerPos().x + CORRECTION_HALF &&
-    //        jumpDinoPosX + jumpDinoWidth * CORRECTION_HALF > player.GetPlayerPos().x - CORRECTION_HALF &&
-    //        jumpDinoPosY - jumpDinoHeight * CORRECTION_HALF < player.GetPlayerPos().y + CORRECTION_HALF &&
-    //        jumpDinoPosY + jumpDinoHeight * CORRECTION_HALF > player.GetPlayerPos().y - CORRECTION_HALF)
-    //    {
-    //        Debug.Log("JumpDino Collision~~~~~~~~~~~");
-
-    //    }
-    //}
 }

@@ -28,12 +28,10 @@ public class Floor
     private float betweenX;
 
     private Vector2 curPos = Vector2.zero;
-    private Camera camera;
 
 
-    public Floor(SpriteRenderer _leftFloorPart, SpriteRenderer _middleFloorPart, SpriteRenderer _rightFloorPart, Transform _floorGroup, bool _isStartFloor = false)
+    public Floor(SpriteRenderer _leftFloorPart, SpriteRenderer _middleFloorPart, SpriteRenderer _rightFloorPart, Transform _floorGroup , float _reposX, bool _isStartFloor = false)
     {
-        camera = Camera.main;
 
         floor = new GameObject("Floor").transform;
         floor.position = Vector3.zero;
@@ -47,7 +45,7 @@ public class Floor
 
         moveSpeed = leftSingleFloor.sortingOrder;
         isStartFloor = _isStartFloor;
-        repositionX = camera.ScreenToWorldPoint(new Vector3(0, 0, 0)).x;
+        repositionX = _reposX;
 
         Initialized();
     }
