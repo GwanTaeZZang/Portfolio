@@ -11,12 +11,16 @@ public class CoinController
     private const float CORRECTION_HALF = 0.25f;
     private const float COIN_INTERVAR = 1.5f;
 
+    public delegate void ScoreDelegate(int _score);
+    public ScoreDelegate scoreEvnet;
+
     private Player player;
     private SpriteRenderer bronzeCoin;
     private Vector2 coinSetVector = Vector2.zero;
 
     private int setCoinIdx = 0;
     private int collisionCoinIdx;
+    private int scoreAmount;
 
     private List<Coin> bronzeCoinList = new List<Coin>();
 
@@ -29,6 +33,7 @@ public class CoinController
         CreateCoin(bronzeCoin, _parent, _reposX);
 
         collisionCoinIdx = 0;
+        scoreAmount = 0;
     }
 
     public void UpdateCoin()
@@ -132,6 +137,9 @@ public class CoinController
             bronzeCoinList[collisionCoinIdx].SetVisible(false);
             collisionCoinIdx++;
             collisionCoinIdx = collisionCoinIdx % CAPACITY;
+
+            scoreAmount++;
+            scoreEvnet?.Invoke(scoreAmount);
         }
 
     }

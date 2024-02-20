@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class InGameSceneController : MonoBehaviour
 {
@@ -22,6 +23,7 @@ public class InGameSceneController : MonoBehaviour
     [SerializeField] private Transform floorParent;
     [SerializeField] private Transform obstacleParent;
     [SerializeField] private Transform coinParent;
+    [SerializeField] private Text scoreAmount;
 
     //private List<Floor> floorList = new List<Floor>(); //.. TODO :: FloorController
     private FloorController floorCtrl;
@@ -57,8 +59,8 @@ public class InGameSceneController : MonoBehaviour
         obstacleCtrl = new ObstacleController(obstacleParent, player, repositionX, SetCoinEvnent);
 
         floorCtrl = new FloorController(floorParent, player, repositionX, SetObstacleEvent);
-        //floorCtrl.newFloorEvent = SetObstacleEvent;
 
+        coinCtrl.scoreEvnet = UpdateScore;
     }
 
     private void Start()
@@ -84,6 +86,11 @@ public class InGameSceneController : MonoBehaviour
     private void SetCoinEvnent(Floor _floor, Obstacle _obstacle)
     {
         coinCtrl.SetCoinPosition(_floor, _obstacle);
+    }
+
+    private void UpdateScore(int _score)
+    {
+        scoreAmount.text = _score.ToString();
     }
 
     //private void CreateFloor()
