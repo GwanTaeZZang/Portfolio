@@ -51,9 +51,14 @@ public class InGameSceneController : MonoBehaviour
 
         player = new Player(playerObj);
 
-        floorCtrl = new FloorController(floorParent, player, repositionX);
-        obstacleCtrl = new ObstacleController(obstacleParent, player, repositionX);
+
         coinCtrl = new CoinController(coinParent, player, repositionX);
+
+        obstacleCtrl = new ObstacleController(obstacleParent, player, repositionX, SetCoinEvnent);
+
+        floorCtrl = new FloorController(floorParent, player, repositionX, SetObstacleEvent);
+        //floorCtrl.newFloorEvent = SetObstacleEvent;
+
     }
 
     private void Start()
@@ -66,14 +71,19 @@ public class InGameSceneController : MonoBehaviour
     {
 
         player.MovePlayer();
-
         floorCtrl.UpdateFloor();
-        //MoveFloors();
-        //UpdateCurrentCollisionFloor();
-        //CheckCollisionFloor();
-
         obstacleCtrl.ObstacleUpdate();
         coinCtrl.UpdateCoin();
+    }
+
+    private void SetObstacleEvent(Floor _floor)
+    {
+        obstacleCtrl.SetRandomObstaclePos(_floor);
+    }
+
+    private void SetCoinEvnent(Floor _floor, Obstacle _obstacle)
+    {
+        coinCtrl.SetCoinPosition(_floor, _obstacle);
     }
 
     //private void CreateFloor()

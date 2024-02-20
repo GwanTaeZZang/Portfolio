@@ -82,8 +82,9 @@ public class Floor
 
     }
 
-    public void SetFloorPosition(float _x, float _y)
+    public void SetFloorPosition(int _x, float _y)
     {
+        //Debug.Log(_x);
         curPos.x = _x;
         curPos.y = _y;
         floor.position = curPos;

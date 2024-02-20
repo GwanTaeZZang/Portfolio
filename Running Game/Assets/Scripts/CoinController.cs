@@ -51,23 +51,38 @@ public class CoinController
         }
     }
 
-    public void SetCoinPosition(Floor _floor)
+    public void SetCoinPosition(Floor _floor, Obstacle _obstacle)
     {
         AABB floorAABB = _floor.GetAABB();
 
         int coinCount = (int)floorAABB.width;
         for(int i =0; i < coinCount; i++)
         {
-            coinSetVector = Vector2.zero;
-            //Debug.Log(setCoinIdx);
-            Coin coin = bronzeCoinList[setCoinIdx];
-            coinSetVector.x = (floorAABB.pos.x - floorAABB.width * HALF) + (COIN_SIZE * HALF) + i;
-            coinSetVector.y = (floorAABB.pos.y + floorAABB.height * HALF) + (COIN_SIZE * HALF);
-            coin.SetPosition(coinSetVector);
-            coin.SetVisible(true);
+            float obstaclePosX = _obstacle.GetPos().x;
+            //Debug.Log("Cactus Pos = " + obstaclePosX);
 
-            setCoinIdx++;
-            setCoinIdx = setCoinIdx % CAPACITY;
+            Coin coin = bronzeCoinList[setCoinIdx];
+            coinSetVector = Vector2.zero;
+            coinSetVector.x = (floorAABB.pos.x - floorAABB.width * HALF) + (COIN_SIZE * HALF) + i;
+
+
+            if (obstaclePosX - 1.5f < coinSetVector.x && obstaclePosX + 1.5f > coinSetVector.x)
+            {
+                //Debug.Log("Dont Set Coin" + obstaclePosX);
+            }
+            else
+            {
+                //coinSetVector = Vector2.zero;
+                //Debug.Log(setCoinIdx);
+                //Coin coin = bronzeCoinList[setCoinIdx];
+                //coinSetVector.x = (floorAABB.pos.x - floorAABB.width * HALF) + (COIN_SIZE * HALF) + i;
+                coinSetVector.y = (floorAABB.pos.y + floorAABB.height * HALF) + (COIN_SIZE * HALF);
+                coin.SetPosition(coinSetVector);
+                coin.SetVisible(true);
+
+                setCoinIdx++;
+                setCoinIdx = setCoinIdx % CAPACITY;
+            }
         }
     }
 }

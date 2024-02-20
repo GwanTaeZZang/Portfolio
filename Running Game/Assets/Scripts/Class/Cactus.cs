@@ -115,6 +115,7 @@ public class Cactus : Obstacle
         float rndMaxX = (aabb.pos.x + aabb.width * HALF) - width * HALF + CACTUS_CORRECTION_POS_MAX;
         pos.x = GetRandomValue(rndMinX, rndMaxX);
         pos.y = (aabb.pos.y + aabb.height * HALF) + height * HALF;
+        //Debug.Log("Set Cactus Position = " + pos.x);
         obstacle.position = pos;
 
         SetVisible(true);

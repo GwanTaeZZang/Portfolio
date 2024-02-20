@@ -5,18 +5,22 @@ using UnityEngine;
 public class FloorController
 {
     private const int CAPACITY = 10;
-    private const int FLOOR_MIN_WIDTH = 4;
-    private const int FLOOR_MAX_WIDTH = 9;
+    private const int DOUBLE = 2;
+    private const int FLOOR_MIN_WIDTH = 2;
+    private const int FLOOR_MAX_WIDTH = 5;
     private const float HALF = 0.5f;
     private const int FLOOR_MIN_Y = -2;
     private const int FLOOR_MAX_Y = 2;
-    private const int FLOOR_BETWEEN_MIN = 2;
+    private const int FLOOR_BETWEEN_MIN = 3;
     private const int FLOOR_BETWEEN_MAX = 5;
     private const float CORRECTION_VALUE = 0.45f;
     private const float NONE_GROUND_VALUE = -30f;
     private const float CORRECTION_HALF = 0.4f;
     private const int PLAYER_WIDTH = 1;
     private const int PLAYER_HEIGHT = 1;
+
+    public delegate void SetObstacleDelegate(Floor _floor);
+    public SetObstacleDelegate setObstacleEvent;
 
     private List<Floor> floorList = new List<Floor>(); //.. TODO :: FloorController
 
@@ -33,11 +37,13 @@ public class FloorController
     private float repositionX;
 
 
-    public FloorController(Transform _parent, Player _player, float _reposX)
+    public FloorController(Transform _parent, Player _player, float _reposX, SetObstacleDelegate _event)
     {
         leftFloorPart = Resources.Load<SpriteRenderer>("Prefab/Floor/Single Left");
         middleFloorPart = Resources.Load<SpriteRenderer>("Prefab/Floor/Single Middle");
         rightFloorPart = Resources.Load<SpriteRenderer>("Prefab/Floor/Single Right");
+
+        setObstacleEvent = _event;
 
         floorParent = _parent;
         player = _player;
@@ -53,6 +59,11 @@ public class FloorController
         UpdateCurrentCollisionFloor();
         CheckCollisionFloor();
     }
+
+    //public newFloorDelegate BindingNewFloorEvnet()
+    //{
+    //    return newFloorEvent;
+    //}
 
     private void CreateFloor()
     {
@@ -107,21 +118,24 @@ public class FloorController
 
     private void ReSizeFloor(Floor _floor)
     {
-        _floor.SetFloorSize(new Vector2(GetRandomValue(FLOOR_MIN_WIDTH, FLOOR_MAX_WIDTH), 1));
+        _floor.SetFloorSize(new Vector2(GetRandomValue(FLOOR_MIN_WIDTH, FLOOR_MAX_WIDTH) * DOUBLE, 1));
     }
 
     private void SetRandomFloorPos(Floor _floor)
     {
-        float posX = lastFloor.GetXPos() + (lastFloor.GetFloorWidth() * HALF);
-        float betweenX = GetRandomValue(FLOOR_BETWEEN_MIN, FLOOR_BETWEEN_MAX);
-        float randomBetweenX = betweenX + (_floor.GetFloorWidth() * HALF);
+        int posX = (int)lastFloor.GetXPos() + (int)(lastFloor.GetFloorWidth() * HALF);
+        int randomBetweenX = GetRandomValue(FLOOR_BETWEEN_MIN, FLOOR_BETWEEN_MAX) + (int)(_floor.GetFloorWidth() * HALF);
         float randomY = GetRandomValue(FLOOR_MIN_Y, FLOOR_MAX_Y);
+
         _floor.SetFloorPosition(posX + randomBetweenX, randomY);
+
+        float betweenX = (_floor.GetXPos() - _floor.GetFloorWidth() * HALF) - (lastFloor.GetXPos() + lastFloor.GetFloorWidth() * HALF);
         _floor.SetBetween(betweenX);
 
 
         //obstacleCtrl.SetRandomObstaclePos(_floor);
         //coinCtrl.SetCoinPosition(_floor);
+        setObstacleEvent?.Invoke(_floor);
     }
 
     private void UpdateCurrentCollisionFloor()
@@ -161,8 +175,6 @@ public class FloorController
     private int GetRandomValue(int _min, int max)
     {
         return Random.Range(_min, max);
-
-
     }
 }
 

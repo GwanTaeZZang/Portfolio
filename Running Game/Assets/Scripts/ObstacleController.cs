@@ -11,6 +11,9 @@ public class ObstacleController
     private const int INIT_JUMPDINO_IDX = CAPACITY * 1;
     private const int INIT_ARROW_IDX = CAPACITY * 2;
 
+    public delegate void SetCoinDelegate(Floor _floor, Obstacle _obstacle);
+    public SetCoinDelegate setCoinEvent;
+
     private List<Obstacle> obstacleList;
     private SpriteRenderer cactus;
     private SpriteRenderer dino;
@@ -29,13 +32,15 @@ public class ObstacleController
 
     //private Camera camera;
 
-    public ObstacleController(Transform _parent, Player _player , float _reposX)
+    public ObstacleController(Transform _parent, Player _player , float _reposX , SetCoinDelegate _event)
     {
         //camera = Camera.main;
 
         cactus = Resources.Load<SpriteRenderer>("Prefab/Obstacle/Cactus/Cactus");
         dino = Resources.Load<SpriteRenderer>("Prefab/Obstacle/Dino/Dino");
         arrow = Resources.Load<SpriteRenderer>("Prefab/Obstacle/Arrow/Arrow");
+
+        setCoinEvent = _event;
 
         obstacleList = new List<Obstacle>();
         player = _player;
@@ -112,23 +117,32 @@ public class ObstacleController
     {
         // Cactus Position Setting
         AABB aabb = _floor.GetAABB();
+        Obstacle obstacle = obstacleList[setCactusIdx];
         if (aabb.width > 6)
         {
-            bool isSet = obstacleList[setCactusIdx].SetPosition(_floor);
+            bool isSet = obstacle.SetPosition(_floor);
             if (isSet)
             {
+                //setCoinEvent?.Invoke(_floor, obstacle);
+
                 //Debug.Log("세팅된 선인장 인덱스" + setCactusIdx  + "   선인장의 넓이 및 인덱스 : " + aabb.width  + aabb.pos);
 
                 setCactusIdx++;
                 setCactusIdx = setCactusIdx % CAPACITY;
             }
+            else
+            {
+                return;
+            }
         }
+        setCoinEvent?.Invoke(_floor, obstacle);
+
     }
     private void SetRandomJumpDinoPos(Floor _floor)
     {
-        if (_floor.GetBetween() < 4)
+        if (_floor.GetBetween() < 3.5f)
         {
-            //Debug.Log(_floor.GetBetween());
+            Debug.Log(_floor.GetBetween());
 
             bool isSet = obstacleList[setJumpDinoIdx].SetPosition(_floor);
             if (isSet)
