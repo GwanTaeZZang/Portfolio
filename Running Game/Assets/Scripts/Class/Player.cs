@@ -13,7 +13,7 @@ public class Player
 {
     private const float JUMP_POWER = 0.047f;
     private const float GRAVITY = 0.1f;
-    private const float DOUBLE_JUMP_POWER = 0.8f;
+    private const float DOUBLE_JUMP_POWER = 1f;
 
     private Transform player;
 

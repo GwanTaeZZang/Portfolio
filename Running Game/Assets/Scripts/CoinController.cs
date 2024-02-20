@@ -5,9 +5,10 @@ using UnityEngine;
 public class CoinController
 {
     private const int CAPACITY = 100;
-    private const int COIN_INTERVAR = 1;
+    private const float JUMP_COIN_HEIGHT = 2.5f;
     private const float COIN_SIZE = 1;
     private const float HALF = 0.5f;
+    private const float COIN_INTERVAR = 1.5f;
 
     private Player player;
     private SpriteRenderer bronzeCoin;
@@ -54,11 +55,13 @@ public class CoinController
     public void SetCoinPosition(Floor _floor, Obstacle _obstacle)
     {
         AABB floorAABB = _floor.GetAABB();
+        AABB obstacleAABB = _obstacle.GetAABB();
 
         int coinCount = (int)floorAABB.width;
         for(int i =0; i < coinCount; i++)
         {
-            float obstaclePosX = _obstacle.GetPos().x;
+            //float obstaclePosX = _obstacle.GetPos().x;
+            float obstaclePosX = obstacleAABB.pos.x;
             //Debug.Log("Cactus Pos = " + obstaclePosX);
 
             Coin coin = bronzeCoinList[setCoinIdx];
@@ -66,9 +69,17 @@ public class CoinController
             coinSetVector.x = (floorAABB.pos.x - floorAABB.width * HALF) + (COIN_SIZE * HALF) + i;
 
 
-            if (obstaclePosX - 1.5f < coinSetVector.x && obstaclePosX + 1.5f > coinSetVector.x)
+            if (obstaclePosX - COIN_INTERVAR < coinSetVector.x && obstaclePosX + COIN_INTERVAR > coinSetVector.x)
             {
                 //Debug.Log("Dont Set Coin" + obstaclePosX);
+                float floorY = (floorAABB.pos.y + floorAABB.height * HALF) + (COIN_SIZE * HALF);
+                coinSetVector.y = floorY + JUMP_COIN_HEIGHT;
+                coin.SetPosition(coinSetVector);
+                coin.SetVisible(true);
+
+                setCoinIdx++;
+                setCoinIdx = setCoinIdx % CAPACITY;
+
             }
             else
             {

@@ -142,7 +142,7 @@ public class ObstacleController
     {
         if (_floor.GetBetween() < 3.5f)
         {
-            Debug.Log(_floor.GetBetween());
+            //Debug.Log(_floor.GetBetween());
 
             bool isSet = obstacleList[setJumpDinoIdx].SetPosition(_floor);
             if (isSet)
