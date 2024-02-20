@@ -5,7 +5,7 @@ using UnityEngine;
 public class ObstacleController
 {
     private const int CAPACITY = 10;
-    private const float CORRECTION_HALF = 0.4f;
+    private const float CORRECTION_HALF = 0.3f;
     private const float HALF = 0.5f;
     private const int INIT_CACTUS_IDX = CAPACITY * 0;
     private const int INIT_JUMPDINO_IDX = CAPACITY * 1;

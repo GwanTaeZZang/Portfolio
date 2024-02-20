@@ -8,6 +8,7 @@ public class CoinController
     private const float JUMP_COIN_HEIGHT = 2.5f;
     private const float COIN_SIZE = 1;
     private const float HALF = 0.5f;
+    private const float CORRECTION_HALF = 0.25f;
     private const float COIN_INTERVAR = 1.5f;
 
     private Player player;
@@ -15,7 +16,7 @@ public class CoinController
     private Vector2 coinSetVector = Vector2.zero;
 
     private int setCoinIdx = 0;
-
+    private int collisionCoinIdx;
 
     private List<Coin> bronzeCoinList = new List<Coin>();
 
@@ -26,11 +27,15 @@ public class CoinController
 
 
         CreateCoin(bronzeCoin, _parent, _reposX);
+
+        collisionCoinIdx = 0;
     }
 
     public void UpdateCoin()
     {
         MoveCoin();
+        UpdateCurrentCollisionCoin();
+        CheckCollisionCoin();
     }
 
     private void CreateCoin(SpriteRenderer _coinSprite, Transform _parent, float _reposX)
@@ -96,4 +101,39 @@ public class CoinController
             }
         }
     }
+
+
+    private void UpdateCurrentCollisionCoin()
+    {
+        Coin curBronzeCoin = bronzeCoinList[collisionCoinIdx];
+        if (player.GetPlayerPos().x - HALF > curBronzeCoin.GetPos().x + (COIN_SIZE * HALF))
+        {
+            collisionCoinIdx++;
+            collisionCoinIdx = collisionCoinIdx % CAPACITY;
+        }
+    }
+
+
+    private void CheckCollisionCoin()
+    {
+        AABB curCoin = bronzeCoinList[collisionCoinIdx].GetAABB();
+        float coinPosX = curCoin.pos.x;
+        float coinPosY = curCoin.pos.y;
+        float coinWidth = curCoin.width;
+        float coinHeight = curCoin.height;
+
+        if (coinPosX - coinWidth * CORRECTION_HALF < player.GetPlayerPos().x + CORRECTION_HALF &&
+            coinPosX + coinWidth * CORRECTION_HALF > player.GetPlayerPos().x - CORRECTION_HALF &&
+            coinPosY - coinHeight * CORRECTION_HALF < player.GetPlayerPos().y + CORRECTION_HALF &&
+            coinPosY + coinHeight * CORRECTION_HALF > player.GetPlayerPos().y - CORRECTION_HALF)
+        {
+            Debug.Log("Coin Collision~~~~~~~~~~~");
+
+            bronzeCoinList[collisionCoinIdx].SetVisible(false);
+            collisionCoinIdx++;
+            collisionCoinIdx = collisionCoinIdx % CAPACITY;
+        }
+
+    }
+
 }

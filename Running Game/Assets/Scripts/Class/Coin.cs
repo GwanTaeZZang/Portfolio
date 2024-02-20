@@ -51,4 +51,19 @@ public class Coin
     {
         coin.gameObject.SetActive(_visible);
     }
+
+    public Vector2 GetPos()
+    {
+        return coinPos;
+    }
+
+    public AABB GetAABB()
+    {
+        AABB aabb;
+        aabb.pos = coinPos;
+        aabb.width = 1;
+        aabb.height = 1; // 지금은 높이가 무조건 1 임시 데이터
+        return aabb;
+    }
+
 }
