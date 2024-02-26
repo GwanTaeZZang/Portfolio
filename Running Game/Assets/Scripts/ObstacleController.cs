@@ -213,10 +213,15 @@ public class ObstacleController
         float obstacleWidth = curObstacle.width;
         float obstacleHeight = curObstacle.height;
 
-        if (obstaclePosX - obstacleWidth * CORRECTION_HALF < player.GetPlayerPos().x + CORRECTION_HALF &&
-            obstaclePosX + obstacleWidth * CORRECTION_HALF > player.GetPlayerPos().x - CORRECTION_HALF &&
-            obstaclePosY - obstacleHeight * CORRECTION_HALF < player.GetPlayerPos().y + CORRECTION_HALF &&
-            obstaclePosY + obstacleHeight * CORRECTION_HALF > player.GetPlayerPos().y - CORRECTION_HALF)
+        //if(_obstacleIdx > 19)
+        //{
+        //    Debug.Log(obstacleHeight);
+        //}
+
+        if (obstaclePosX - obstacleWidth * HALF < player.GetPlayerPos().x + CORRECTION_HALF &&
+            obstaclePosX + obstacleWidth * HALF > player.GetPlayerPos().x - CORRECTION_HALF &&
+            obstaclePosY - obstacleHeight * HALF < player.GetPlayerPos().y + CORRECTION_HALF &&
+            obstaclePosY + obstacleHeight * HALF > player.GetPlayerPos().y - CORRECTION_HALF)
         {
             Debug.Log("Collision~~~~~~~~~~~");
         }

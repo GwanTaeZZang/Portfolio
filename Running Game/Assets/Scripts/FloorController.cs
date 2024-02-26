@@ -166,7 +166,7 @@ public class FloorController
             player.SetGroundPosY(curFloorPosY + curFloorHeight);
             player.SetIsGround(true);
             player.PlayerPosYInterpolation(curFloorPosY + curFloorHeight);
-            Debug.Log("바닥과의 출돌중 ");
+            //Debug.Log("바닥과의 출돌중 ");
         }
         else
         {
