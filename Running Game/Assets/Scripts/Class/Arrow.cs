@@ -16,6 +16,7 @@ public class Arrow : Obstacle
 
     public override void Initialized(SpriteRenderer _obstacle, Transform _parent, float _rePosX)
     {
+        // 단일 화살 장애물 사용할 때 사용 
         //arrowRenderer = GameObject.Instantiate<SpriteRenderer>(_obstacle, _parent);
         //obstacle = arrowRenderer.transform;
         CreateArrowPattern(_obstacle, _parent);
@@ -65,7 +66,6 @@ public class Arrow : Obstacle
             arrowPos.y = -(i * ARROW_HEIGHT_INTERVAL) + startPosY;
             arrow.transform.position = arrowPos;
         }
-        //SetVirtualPivot(COUNT);
     }
 
     private void RandomArrowPatternCount()
@@ -83,23 +83,7 @@ public class Arrow : Obstacle
             }
         }
         SetArrowPatternPosition(count);
-        //SetVirtualPivot(count);
     }
-
-    //private void SetVirtualPivot(int _count)
-    //{
-    //    height = ARROW_HEIGHT_INTERVAL * _count;
-    //    float centerPivotY = -(height * HALF);
-
-    //    Vector2 pos = arrowPatternTransform.position;
-    //    pos.y += centerPivotY;
-    //    arrowPatternTransform.position = pos;
-
-    //    Debug.Log(arrowPatternTransform.position);
-
-    //    //Debug.DrawLine(new Vector3(arrowPatternTransform.position.x - width * HALF, arrowPatternTransform.position.y - height * HALF), new Vector3(arrowPatternTransform.position.x - width * HALF, arrowPatternTransform.position.y - height * HALF), Color.blue);
-    //}
-
 
 
 
@@ -115,20 +99,6 @@ public class Arrow : Obstacle
             arrowPos.x += Time.deltaTime * speed * -HALF * 2;
             obstacle.position = arrowPos;
         }
-
-
-
-
-
-
-
-        Debug.DrawLine(new Vector3(obstacle.position.x, obstacle.position.y - height * HALF), new Vector3(obstacle.position.x, obstacle.position.y + height * HALF), Color.red);
-
-
-        Debug.DrawLine(new Vector3(obstacle.position.x - width * HALF, obstacle.position.y - height * 0.3f),
-            new Vector3(obstacle.position.x - width * HALF, obstacle.position.y + height * 0.3f), Color.red);
-        Debug.DrawLine(new Vector3(obstacle.position.x + width * HALF, obstacle.position.y - height * HALF),
-            new Vector3(obstacle.position.x + width * HALF, obstacle.position.y + height * HALF), Color.red);
     }
 
     public override bool SetPosition(Floor _floor)
