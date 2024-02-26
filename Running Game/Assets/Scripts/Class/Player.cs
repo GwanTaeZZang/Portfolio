@@ -11,8 +11,8 @@ public enum PlayerState
 
 public class Player
 {
-    private const float JUMP_POWER = 0.047f;
-    private const float GRAVITY = 0.1f;
+    private const float JUMP_POWER = 0.0131f;
+    private const float GRAVITY = 0.025f;
     private const float DOUBLE_JUMP_POWER = 1f;
 
     private Transform player;
@@ -52,8 +52,9 @@ public class Player
             DoubleJump();
 
         }
-        Gravity();
+        //Gravity();
     }
+
 
     public void Jump()
     {

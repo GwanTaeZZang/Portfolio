@@ -71,11 +71,15 @@ public class InGameSceneController : MonoBehaviour
 
     private void Update()
     {
-
         player.MovePlayer();
+    }
+
+    private void FixedUpdate()
+    {
         floorCtrl.UpdateFloor();
         obstacleCtrl.ObstacleUpdate();
         coinCtrl.UpdateCoin();
+        player.Gravity();
     }
 
     private void SetObstacleEvent(Floor _floor)

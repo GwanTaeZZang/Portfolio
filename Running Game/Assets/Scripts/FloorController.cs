@@ -55,9 +55,9 @@ public class FloorController
 
     public void UpdateFloor()
     {
-        MoveFloors();
         UpdateCurrentCollisionFloor();
         CheckCollisionFloor();
+        MoveFloors();
     }
 
     //public newFloorDelegate BindingNewFloorEvnet()
@@ -156,6 +156,8 @@ public class FloorController
         float curFloorWidth = curFloor.width;
         float curFloorHeight = curFloor.height;
 
+        //floorList[collisionFloorIdx].middleSingleFloor.color = new Color(0, 0, 0);
+
         if (curFloorPosX - curFloorWidth * HALF < player.GetPlayerPos().x + PLAYER_WIDTH * CORRECTION_HALF &&
             curFloorPosX + curFloorWidth * HALF > player.GetPlayerPos().x - PLAYER_WIDTH * CORRECTION_HALF &&
             curFloorPosY + curFloorHeight * CORRECTION_VALUE < player.GetPlayerPos().y - PLAYER_HEIGHT * CORRECTION_VALUE &&
@@ -164,6 +166,7 @@ public class FloorController
             player.SetGroundPosY(curFloorPosY + curFloorHeight);
             player.SetIsGround(true);
             player.PlayerPosYInterpolation(curFloorPosY + curFloorHeight);
+            Debug.Log("바닥과의 출돌중 ");
         }
         else
         {
