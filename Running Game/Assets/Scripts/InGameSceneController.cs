@@ -19,14 +19,18 @@ public class InGameSceneController : MonoBehaviour
     private Player player;
 
     private float repositionX;
+    private float inScenePosX;
 
     private void Awake()
     {
         repositionX = Camera.main.ScreenToWorldPoint(new Vector3(0, 0, 0)).x;
+        inScenePosX = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, 0, 0)).x;
+        //Debug.Log(Screen.width);
+        //Debug.Log(inScenePosX);
 
         player = new Player(playerObj);
 
-        coinCtrl = new CoinController(coinParent, player, repositionX);
+        coinCtrl = new CoinController(coinParent, player, repositionX, inScenePosX);
 
         obstacleCtrl = new ObstacleController(obstacleParent, player, repositionX, SetCoinEvnent);
 

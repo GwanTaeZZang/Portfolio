@@ -24,13 +24,13 @@ public class CoinController
 
     private List<Coin> bronzeCoinList = new List<Coin>();
 
-    public CoinController(Transform _parent, Player _player, float _reposX)
+    public CoinController(Transform _parent, Player _player, float _reposX, float _inScenePosX)
     {
         player = _player;
         bronzeCoin = Resources.Load<SpriteRenderer>("Prefab/Coin/BronzeCoin");
 
 
-        CreateCoin(bronzeCoin, _parent, _reposX);
+        CreateCoin(bronzeCoin, _parent, _reposX, _inScenePosX);
 
         collisionCoinIdx = 0;
         scoreAmount = 0;
@@ -39,15 +39,16 @@ public class CoinController
     public void UpdateCoin()
     {
         MoveCoin();
-        UpdateCurrentCollisionCoin();
-        CheckCollisionCoin();
+        UpdateCollisionCoin();
+        //UpdateCurrentCollisionCoin();
+        //CheckCollisionCoin();
     }
 
-    private void CreateCoin(SpriteRenderer _coinSprite, Transform _parent, float _reposX)
+    private void CreateCoin(SpriteRenderer _coinSprite, Transform _parent, float _reposX, float _inScenePosX)
     {
         for(int i =0; i < CAPACITY; i++)
         {
-            bronzeCoinList.Add(new Coin(_coinSprite, _parent, _reposX, setCoinIdx));
+            bronzeCoinList.Add(new Coin(_coinSprite, _parent, _reposX, _inScenePosX, setCoinIdx));
             setCoinIdx++;
         }
         setCoinIdx = 0;
@@ -107,6 +108,43 @@ public class CoinController
         }
     }
 
+
+    private void UpdateCollisionCoin()
+    {
+        int count = bronzeCoinList.Count;
+        for(int i =0; i < count; i++)
+        {
+            Coin curBronzeCoin = bronzeCoinList[i];
+
+            bool isInScene = curBronzeCoin.IsInScene();
+            if (isInScene)
+            {
+                AABB curCoin = curBronzeCoin.GetAABB();
+                float coinPosX = curCoin.pos.x;
+                float coinPosY = curCoin.pos.y;
+                float coinWidth = curCoin.width;
+                float coinHeight = curCoin.height;
+
+                if (coinPosX - coinWidth * CORRECTION_HALF < player.GetPlayerPos().x + CORRECTION_HALF &&
+                    coinPosX + coinWidth * CORRECTION_HALF > player.GetPlayerPos().x - CORRECTION_HALF &&
+                    coinPosY - coinHeight * CORRECTION_HALF < player.GetPlayerPos().y + CORRECTION_HALF &&
+                    coinPosY + coinHeight * CORRECTION_HALF > player.GetPlayerPos().y - CORRECTION_HALF)
+                {
+                    Debug.Log("Coin Collision~~~~~~~~~~~");
+
+                    curBronzeCoin.SetVisible(false);
+                    curBronzeCoin.SetIsInScene(false);
+
+                    //collisionCoinIdx++;
+                    //collisionCoinIdx = collisionCoinIdx % CAPACITY;
+
+                    scoreAmount++;
+                    scoreEvnet?.Invoke(scoreAmount);
+
+                }
+            }
+        }
+    }
 
     private void UpdateCurrentCollisionCoin()
     {

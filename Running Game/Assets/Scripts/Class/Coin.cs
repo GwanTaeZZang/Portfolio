@@ -11,20 +11,27 @@ public class Coin
     private float width = 1;
     private float speed;
     private float repositionX;
-
+    private float inScenePosX;
 
     private SpriteRenderer coinRenderer;
     private Transform coin;
     private Vector2 coinPos;
 
-    public Coin(SpriteRenderer _obstacle, Transform _parent, float _rePosX, int _idx)
+    private bool isInScene;
+
+    public Coin(SpriteRenderer _obstacle, Transform _parent, float _rePosX, float _inScenePosX, int _idx)
     {
         coinRenderer = GameObject.Instantiate<SpriteRenderer>(_obstacle, _parent);
         coin = coinRenderer.transform;
+
         coinPos = coin.position = new Vector2(CREATE_POS_X, CREATE_POS_Y);
         coin.name = coin.name + _idx;
+
         speed = coinRenderer.sortingOrder;
         repositionX = _rePosX;
+        inScenePosX = _inScenePosX;
+        isInScene = false;
+
         SetVisible(false);
     }
 
@@ -32,12 +39,18 @@ public class Coin
     {
         if (coin.position.x + width * HALF < repositionX)
         {
+            isInScene = false;
             SetVisible(false);
         }
         else
         {
             coinPos.x += Time.deltaTime * speed * -HALF;
             coin.position = coinPos;
+        }
+
+        if(coin.position.x < inScenePosX && coin.gameObject.activeSelf)
+        {
+            isInScene = true;
         }
     }
 
@@ -66,4 +79,13 @@ public class Coin
         return aabb;
     }
 
+    public bool IsInScene()
+    {
+        return isInScene;
+    }
+
+    public void SetIsInScene(bool _isInScene)
+    {
+        isInScene = _isInScene;
+    }
 }
