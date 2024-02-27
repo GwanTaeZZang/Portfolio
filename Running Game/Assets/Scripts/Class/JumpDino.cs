@@ -15,7 +15,7 @@ public class JumpDino : Obstacle
     private Vector2 jumpDinoPos;
     
 
-    public override void Initialized(SpriteRenderer _obstacle, Transform _parent, float _rePosX)
+    public override void Initialized(SpriteRenderer _obstacle, Transform _parent, float _rePosX, float _inScenePosX)
     {
         jumpDinoRenderer = GameObject.Instantiate<SpriteRenderer>(_obstacle, _parent);
         obstacle = jumpDinoRenderer.transform;
@@ -25,6 +25,9 @@ public class JumpDino : Obstacle
 
         speed = jumpDinoRenderer.sortingOrder;
         repositionX = _rePosX;
+        inScenePosX = _inScenePosX;
+        isCollision = false;
+
 
         SetVisible(false);
     }
@@ -35,12 +38,19 @@ public class JumpDino : Obstacle
         if (jumpDinoPos.x + width * HALF < repositionX)
         {
             SetVisible(false);
+            isInScene = false;
+            isCollision = false;
         }
         else
         {
             //Vector2 pos = obstacle.position;
             jumpDinoPos.x += Time.deltaTime * speed * -HALF;
             obstacle.position = jumpDinoPos;
+        }
+
+        if (obstacle.position.x < inScenePosX && !isCollision)
+        {
+            isInScene = true;
         }
 
 

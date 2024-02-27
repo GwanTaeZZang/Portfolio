@@ -32,7 +32,7 @@ public class InGameSceneController : MonoBehaviour
 
         coinCtrl = new CoinController(coinParent, player, repositionX, inScenePosX);
 
-        obstacleCtrl = new ObstacleController(obstacleParent, player, repositionX, SetCoinEvnent);
+        obstacleCtrl = new ObstacleController(obstacleParent, player, repositionX, inScenePosX, SetCoinEvnent);
 
         floorCtrl = new FloorController(floorParent, player, repositionX, SetObstacleEvent);
 

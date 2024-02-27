@@ -8,7 +8,7 @@ public class Cactus : Obstacle
     private SpriteRenderer cactusRenderer;
     private Sprite[] cactusSpriteArr;
 
-    public override void Initialized(SpriteRenderer _obstacle, Transform _parent, float _rePosX)
+    public override void Initialized(SpriteRenderer _obstacle, Transform _parent, float _rePosX, float _inScenePosX)
     {
 
         cactusRenderer = GameObject.Instantiate<SpriteRenderer>(_obstacle, _parent);
@@ -20,6 +20,9 @@ public class Cactus : Obstacle
                                          Resources.Load<Sprite>("Prefab/Sprite/Cactus/Cactus C")};
         speed = cactusRenderer.sortingOrder;
         repositionX = _rePosX;
+        inScenePosX = _inScenePosX;
+        isCollision = false;
+
 
         SetVisible(false);
     }
@@ -29,6 +32,9 @@ public class Cactus : Obstacle
         if (obstacle.position.x + width * HALF < repositionX)
         {
             SetVisible(false);
+            isInScene = false;
+            isCollision = false;
+
         }
         else
         {
@@ -36,6 +42,12 @@ public class Cactus : Obstacle
             pos.x += Time.deltaTime * speed * -HALF;
             obstacle.position = pos;
         }
+
+        if (obstacle.position.x < inScenePosX && !isCollision)
+        {
+            isInScene = true;
+        }
+
     }
 
     //public void MoveCactus()

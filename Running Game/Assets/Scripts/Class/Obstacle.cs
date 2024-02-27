@@ -20,14 +20,17 @@ public abstract class Obstacle
     protected float height;
     protected float speed;
     protected float repositionX;
+    protected float inScenePosX;
+    protected bool isInScene;
+    protected bool isCollision;
 
-    private SpriteRenderer obstacleRenderer;
+    //private SpriteRenderer obstacleRenderer;
 
     protected Transform obstacle;
 
     public abstract void Move();
     public abstract bool SetPosition(Floor _floor);
-    public abstract void Initialized(SpriteRenderer _obstacle, Transform _parent, float _rePosX);
+    public abstract void Initialized(SpriteRenderer _obstacle, Transform _parent, float _rePosX, float _inScenePosX);
 
     public AABB GetAABB()
     {
@@ -57,5 +60,20 @@ public abstract class Obstacle
     public int GetRandomValue(float _min, float _max)
     {
         return (int)Random.Range(_min, _max);
+    }
+
+    public bool IsInScene()
+    {
+        return isInScene;
+    }
+
+    public void SetIsInScene(bool _isInScene)
+    {
+        isInScene = _isInScene;
+    }
+
+    public void SetIsCollision(bool _isCollision)
+    {
+        isCollision = _isCollision;
     }
 }

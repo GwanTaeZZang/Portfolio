@@ -14,7 +14,7 @@ public class Arrow : Obstacle
 
     private float arrowHeight;
 
-    public override void Initialized(SpriteRenderer _obstacle, Transform _parent, float _rePosX)
+    public override void Initialized(SpriteRenderer _obstacle, Transform _parent, float _rePosX, float _inScenePosX)
     {
         // 단일 화살 장애물 사용할 때 사용 
         //arrowRenderer = GameObject.Instantiate<SpriteRenderer>(_obstacle, _parent);
@@ -29,6 +29,9 @@ public class Arrow : Obstacle
 
         speed = arrowRenderer.sortingOrder;
         repositionX = _rePosX;
+        inScenePosX = _inScenePosX;
+        isCollision = false;
+
 
         width = arrowRenderer.bounds.size.x;
         arrowHeight = arrowRenderer.bounds.size.y;
@@ -92,6 +95,9 @@ public class Arrow : Obstacle
         if (arrowPos.x + width * HALF < repositionX)
         {
             SetVisible(false);
+            isInScene = false;
+            isCollision = false;
+
         }
         else
         {
@@ -99,6 +105,12 @@ public class Arrow : Obstacle
             arrowPos.x += Time.deltaTime * speed * -HALF * 2;
             obstacle.position = arrowPos;
         }
+
+        if (obstacle.position.x < inScenePosX && !isCollision)
+        {
+            isInScene = true;
+        }
+
     }
 
     public override bool SetPosition(Floor _floor)

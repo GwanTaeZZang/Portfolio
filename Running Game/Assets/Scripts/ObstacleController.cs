@@ -32,7 +32,7 @@ public class ObstacleController
 
     //private Camera camera;
 
-    public ObstacleController(Transform _parent, Player _player , float _reposX , SetCoinDelegate _event)
+    public ObstacleController(Transform _parent, Player _player , float _reposX , float _inScenePosX, SetCoinDelegate _event)
     {
         //camera = Camera.main;
 
@@ -46,9 +46,9 @@ public class ObstacleController
         player = _player;
         //repositionX = camera.ScreenToWorldPoint(new Vector3(0, 0, 0)).x;
 
-        CreateObstacle<Cactus>(cactus, _parent, _reposX);
-        CreateObstacle<JumpDino>(dino, _parent, _reposX);
-        CreateObstacle<Arrow>(arrow, _parent, _reposX);
+        CreateObstacle<Cactus>(cactus, _parent, _reposX, _inScenePosX);
+        CreateObstacle<JumpDino>(dino, _parent, _reposX, _inScenePosX);
+        CreateObstacle<Arrow>(arrow, _parent, _reposX, _inScenePosX);
 
         count = obstacleList.Count;
 
@@ -65,14 +65,17 @@ public class ObstacleController
     public void ObstacleUpdate()
     {
         MoveObstacle();
-        UpdateCurrentCollisionCactus();
-        CheckCollisionObstacle(collisionCactusIdx);
 
-        UpdateCurrentCollisionJumpDino();
-        CheckCollisionObstacle(collisionJumpDinoIdx);
+        UpdateCollisionObstacle();
 
-        UpdateCurrentCollisionArrow();
-        CheckCollisionObstacle(collisionArrowIdx);
+        //UpdateCurrentCollisionCactus();
+        //CheckCollisionObstacle(collisionCactusIdx);
+
+        //UpdateCurrentCollisionJumpDino();
+        //CheckCollisionObstacle(collisionJumpDinoIdx);
+
+        //UpdateCurrentCollisionArrow();
+        //CheckCollisionObstacle(collisionArrowIdx);
 
 
         //CheckCollisionJumpDino();
@@ -84,12 +87,12 @@ public class ObstacleController
         SetRandomArrowPos(_floor);
     }
 
-    private void CreateObstacle<T>(SpriteRenderer _obstacle, Transform _parent, float _reposX) where T : Obstacle, new()
+    private void CreateObstacle<T>(SpriteRenderer _obstacle, Transform _parent, float _reposX, float _inScenePosX) where T : Obstacle, new()
     {
         for (int i = 0; i < CAPACITY; i++)
         {
             T obstacle = new T();
-            obstacle.Initialized(_obstacle, _parent, _reposX);
+            obstacle.Initialized(_obstacle, _parent, _reposX, _inScenePosX);
             obstacleList.Add(obstacle);
         }
         //frontCactusIdx = 0;
@@ -207,11 +210,11 @@ public class ObstacleController
 
     private void CheckCollisionObstacle(int _obstacleIdx)
     {
-        AABB curObstacle = obstacleList[_obstacleIdx].GetAABB();
-        float obstaclePosX = curObstacle.pos.x;
-        float obstaclePosY = curObstacle.pos.y;
-        float obstacleWidth = curObstacle.width;
-        float obstacleHeight = curObstacle.height;
+        AABB curObstacleAABB = obstacleList[_obstacleIdx].GetAABB();
+        float obstaclePosX = curObstacleAABB.pos.x;
+        float obstaclePosY = curObstacleAABB.pos.y;
+        float obstacleWidth = curObstacleAABB.width;
+        float obstacleHeight = curObstacleAABB.height;
 
         //if(_obstacleIdx > 19)
         //{
@@ -226,6 +229,43 @@ public class ObstacleController
             Debug.Log("Collision~~~~~~~~~~~");
         }
 
+    }
+
+
+    private void UpdateCollisionObstacle()
+    {
+        int count = obstacleList.Count;
+        for(int i =0; i < count; i++)
+        {
+            Obstacle curObstacle = obstacleList[i];
+
+            if (curObstacle.IsInScene())
+            {
+                AABB curObstacleAABB = curObstacle.GetAABB();
+                float obstaclePosX = curObstacleAABB.pos.x;
+                float obstaclePosY = curObstacleAABB.pos.y;
+                float obstacleWidth = curObstacleAABB.width;
+                float obstacleHeight = curObstacleAABB.height;
+
+                //if(_obstacleIdx > 19)
+                //{
+                //    Debug.Log(obstacleHeight);
+                //}
+
+                if (obstaclePosX - obstacleWidth * HALF < player.GetPlayerPos().x + CORRECTION_HALF &&
+                    obstaclePosX + obstacleWidth * HALF > player.GetPlayerPos().x - CORRECTION_HALF &&
+                    obstaclePosY - obstacleHeight * HALF < player.GetPlayerPos().y + CORRECTION_HALF &&
+                    obstaclePosY + obstacleHeight * HALF > player.GetPlayerPos().y - CORRECTION_HALF)
+                {
+                    Debug.Log("Collision~~~~~~~~~~~");
+                    curObstacle.SetIsCollision(true);
+                    curObstacle.SetIsInScene(false);
+                }
+
+            }
+
+
+        }
     }
 
 }
