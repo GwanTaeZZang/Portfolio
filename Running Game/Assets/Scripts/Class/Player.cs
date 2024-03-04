@@ -27,6 +27,7 @@ public class Player
     private Animator anim;
     private PlayerState playerState;
     private Vector2 curPos;
+    private Rect playerRect;
 
     public Player(Transform _player)
     {
@@ -37,6 +38,7 @@ public class Player
         isDoublejump = false;
         curGorundY = 0;
         curPos = player.position;
+        playerRect = new Rect(curPos.x - 1 * 0.5f, curPos.y + 1 * 0.5f, 1, 1);
     }
 
     public void MovePlayer()
@@ -83,12 +85,12 @@ public class Player
             curPos.y += curJumpPower;
             player.position = curPos;
 
-            if(curJumpPower < 0)
+            if(curJumpPower < 0 && isJump)
             {
                 ChangePlayerAnimation(PlayerState.Land);
             }
 
-            if (curPos.y < curGorundY)
+            if (curPos.y <= curGorundY)
             {
                 ChangePlayerAnimation(PlayerState.Walk);
                 isJump = false;
@@ -119,6 +121,12 @@ public class Player
     public Vector2 GetPlayerPos()
     {
         return curPos;
+    }
+
+    public Rect GetRect()
+    {
+        playerRect.Set(curPos.x - 1 * 0.5f, curPos.y + 1 * 0.5f, 1, 1);
+        return playerRect;
     }
 
     public void SetGroundPosY(float _groundY)

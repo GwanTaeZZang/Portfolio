@@ -193,17 +193,6 @@ public class CoinController
                     curCoin.SetVisible(false);
                     curCoin.SetIsInScene(false);
 
-                    //if(COIN_TYPE.bronze == curCoin.GetCoinType())
-                    //{
-                    //    scoreAmount += (int)COIN_TYPE.bronze;
-                    //    scoreEvnet?.Invoke(scoreAmount);
-                    //}
-                    //if(COIN_TYPE.silver == curCoin.GetCoinType())
-                    //{
-                    //    scoreAmount += (int)COIN_TYPE.silver;
-                    //    scoreEvnet?.Invoke(scoreAmount);
-                    //}
-
                     scoreAmount += (int)curCoin.GetCoinType();
                     scoreEvnet?.Invoke(scoreAmount);
                 }

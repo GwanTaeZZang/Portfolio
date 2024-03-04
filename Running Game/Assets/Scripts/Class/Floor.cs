@@ -28,7 +28,7 @@ public class Floor
     private float betweenX;
 
     private Vector2 curPos = Vector2.zero;
-
+    private Rect floorRect;
 
     public Floor(SpriteRenderer _leftFloorPart, SpriteRenderer _middleFloorPart, SpriteRenderer _rightFloorPart, Transform _floorGroup , float _reposX, bool _isStartFloor = false)
     {
@@ -38,6 +38,8 @@ public class Floor
         floor.SetParent(_floorGroup);
 
         curPos = floor.position;
+
+        floorRect = new Rect(0, 0, 0, 0);
 
         leftSingleFloor = GameObject.Instantiate<SpriteRenderer>(_leftFloorPart, floor);
         middleSingleFloor = GameObject.Instantiate<SpriteRenderer>(_middleFloorPart, floor);
@@ -132,7 +134,11 @@ public class Floor
         aabb.height = 1; // 지금은 높이가 무조건 1 임시 데이터
         return aabb;
     }
-
+    public Rect GetRect()
+    {
+        floorRect.Set(curPos.x - width * HALF ,curPos.y + 1 * HALF ,width ,1);
+        return floorRect;
+    }
 
     private void ResetFloorPartsPos()
     {

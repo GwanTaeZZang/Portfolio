@@ -143,26 +143,68 @@ public class FloorController
 
     private void CheckCollisionFloor()
     {
-        AABB curFloor = floorList[collisionFloorIdx].GetAABB();
-        float curFloorPosX = curFloor.pos.x;
-        float curFloorPosY = curFloor.pos.y;
-        float curFloorWidth = curFloor.width;
-        float curFloorHeight = curFloor.height;
+        Rect floorRect = floorList[collisionFloorIdx].GetRect();
+        //float posX = floorRect.x + floorRect.width * HALF;
+        float posY = floorRect.y - floorRect.height * HALF;
+        //float width = floorRect.width;
+        float height = floorRect.height;
 
-        if (curFloorPosX - curFloorWidth * HALF < player.GetPlayerPos().x + PLAYER_WIDTH * CORRECTION_HALF &&
-            curFloorPosX + curFloorWidth * HALF > player.GetPlayerPos().x - PLAYER_WIDTH * CORRECTION_HALF &&
-            curFloorPosY + curFloorHeight * CORRECTION_VALUE < player.GetPlayerPos().y - PLAYER_HEIGHT * CORRECTION_VALUE &&
-            curFloorPosY + curFloorHeight * HALF >= player.GetPlayerPos().y - PLAYER_HEIGHT * HALF)
+        //Debug.Log(floorRect.Overlaps(player.GetRect()));
+
+        if (floorRect.Overlaps(player.GetRect()))
         {
-            player.SetGroundPosY(curFloorPosY + curFloorHeight);
+            player.SetGroundPosY(posY + height);
+            player.PlayerPosYInterpolation(posY + height);
             player.SetIsGround(true);
-            player.PlayerPosYInterpolation(curFloorPosY + curFloorHeight);
         }
         else
         {
             player.SetGroundPosY(NONE_GROUND_VALUE);
             player.SetIsGround(false);
         }
+
+
+        //if (posX - width * HALF < player.GetPlayerPos().x + PLAYER_WIDTH * CORRECTION_HALF &&
+        //    posX + width * HALF > player.GetPlayerPos().x - PLAYER_WIDTH * CORRECTION_HALF &&
+        //    posY + height * CORRECTION_VALUE < player.GetPlayerPos().y - PLAYER_HEIGHT * CORRECTION_VALUE &&
+        //    posY + height * HALF >= player.GetPlayerPos().y - PLAYER_HEIGHT * HALF)
+        //{
+        //    player.SetGroundPosY(posY + height);
+        //    player.SetIsGround(true);
+        //    player.PlayerPosYInterpolation(posY + height);
+        //}
+        //else
+        //{
+        //    player.SetGroundPosY(NONE_GROUND_VALUE);
+        //    player.SetIsGround(false);
+        //}
+
+
+
+
+
+
+
+        //AABB curFloor = floorList[collisionFloorIdx].GetAABB();
+        //float curFloorPosX = curFloor.pos.x;
+        //float curFloorPosY = curFloor.pos.y;
+        //float curFloorWidth = curFloor.width;
+        //float curFloorHeight = curFloor.height;
+
+        //if (curFloorPosX - curFloorWidth * HALF < player.GetPlayerPos().x + PLAYER_WIDTH * CORRECTION_HALF &&
+        //    curFloorPosX + curFloorWidth * HALF > player.GetPlayerPos().x - PLAYER_WIDTH * CORRECTION_HALF &&
+        //    curFloorPosY + curFloorHeight * CORRECTION_VALUE < player.GetPlayerPos().y - PLAYER_HEIGHT * CORRECTION_VALUE &&
+        //    curFloorPosY + curFloorHeight * HALF >= player.GetPlayerPos().y - PLAYER_HEIGHT * HALF)
+        //{
+        //    player.SetGroundPosY(curFloorPosY + curFloorHeight);
+        //    player.SetIsGround(true);
+        //    player.PlayerPosYInterpolation(curFloorPosY + curFloorHeight);
+        //}
+        //else
+        //{
+        //    player.SetGroundPosY(NONE_GROUND_VALUE);
+        //    player.SetIsGround(false);
+        //}
     }
 
     private int GetRandomValue(int _min, int max)
