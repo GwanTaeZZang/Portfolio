@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class JumpDino : Obstacle
 {
-    private const float JUMP_POWER = 0.026f;
+    private const float JUMP_POWER = 0.027f;
     private const float GRAVITY = 0.015f;
     private const int REJUMP_POS_Y = -20;
 

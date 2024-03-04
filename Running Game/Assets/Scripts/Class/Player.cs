@@ -11,7 +11,7 @@ public enum PlayerState
 
 public class Player
 {
-    private const float JUMP_POWER = 0.0131f;
+    private const float JUMP_POWER = 0.014f;
     private const float GRAVITY = 0.025f;
     private const float DOUBLE_JUMP_POWER = 0.9f;
 

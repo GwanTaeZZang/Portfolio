@@ -10,11 +10,11 @@ public class CoinController
     private const float HALF = 0.5f;
     private const float CORRECTION_HALF = 0.25f;
     private const float COIN_INTERVAR = 1.5f;
-    private const int COIN_SQUARE_PATTURN_FLOOR_BETWEEN = 3;
+    private const int COIN_SQUARE_PATTURN_FLOOR_BETWEEN = 4;
     private const int COIN_SQUARE_PATTURN_WIDTH_MIN = 1;
     private const int COIN_SQUARE_PATTURN_WIDTH_MAX = 6;
     private const int COIN_SQUARE_PATTURN_HEIGHT_MIN = 1;
-    private const int COIN_SQUARE_PATTURN_HEIGHT_MAX = 3;
+    private const int COIN_SQUARE_PATTURN_HEIGHT_MAX = 4;
 
     public delegate void ScoreDelegate(int _score);
     public ScoreDelegate scoreEvnet;
@@ -124,7 +124,8 @@ public class CoinController
         centerPos.x = (centerPos.x - floorAABB.width * HALF) - between * HALF;
         centerPos.y += COIN_SQUARE_PATTURN_FLOOR_BETWEEN;
 
-        int width = GetRandomValue(COIN_SQUARE_PATTURN_WIDTH_MIN, COIN_SQUARE_PATTURN_WIDTH_MAX);
+        int width = GetRandomValue(COIN_SQUARE_PATTURN_WIDTH_MIN, (int)between);
+        //int width = (int)between;
         int height = GetRandomValue(COIN_SQUARE_PATTURN_HEIGHT_MIN, COIN_SQUARE_PATTURN_HEIGHT_MAX);
         SetCoinSquarePattern(centerPos, width, height);
 
@@ -147,7 +148,19 @@ public class CoinController
 
             curCoin.SetPosition(startPos);
             curCoin.SetVisible(true);
-            curCoin.ChangeCoinType(COIN_TYPE.silver);
+            if(count <= 3)
+            {
+                curCoin.ChangeCoinType(COIN_TYPE.gold);
+            }
+            else if(6 >= count && count > 3)
+            {
+                curCoin.ChangeCoinType(COIN_TYPE.silver);
+            }
+            else
+            {
+                curCoin.ChangeCoinType(COIN_TYPE.bronze);
+            }
+
 
             setCoinIdx++;
             setCoinIdx = setCoinIdx % CAPACITY;
@@ -180,17 +193,19 @@ public class CoinController
                     curCoin.SetVisible(false);
                     curCoin.SetIsInScene(false);
 
-                    if(COIN_TYPE.bronze == curCoin.GetCoinType())
-                    {
-                        scoreAmount += (int)COIN_TYPE.bronze;
-                        scoreEvnet?.Invoke(scoreAmount);
-                    }
-                    if(COIN_TYPE.silver == curCoin.GetCoinType())
-                    {
-                        scoreAmount += (int)COIN_TYPE.silver;
-                        scoreEvnet?.Invoke(scoreAmount);
-                    }
+                    //if(COIN_TYPE.bronze == curCoin.GetCoinType())
+                    //{
+                    //    scoreAmount += (int)COIN_TYPE.bronze;
+                    //    scoreEvnet?.Invoke(scoreAmount);
+                    //}
+                    //if(COIN_TYPE.silver == curCoin.GetCoinType())
+                    //{
+                    //    scoreAmount += (int)COIN_TYPE.silver;
+                    //    scoreEvnet?.Invoke(scoreAmount);
+                    //}
 
+                    scoreAmount += (int)curCoin.GetCoinType();
+                    scoreEvnet?.Invoke(scoreAmount);
                 }
             }
         }
