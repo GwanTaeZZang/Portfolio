@@ -25,9 +25,6 @@ public class InGameSceneController : MonoBehaviour
     {
         repositionX = Camera.main.ScreenToWorldPoint(new Vector3(0, 0, 0)).x;
         inScenePosX = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, 0, 0)).x;
-        //Debug.Log(Screen.width);
-        //Debug.Log(inScenePosX);
-
         player = new Player(playerObj);
 
         coinCtrl = new CoinController(coinParent, player, repositionX, inScenePosX);

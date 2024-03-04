@@ -77,7 +77,6 @@ public class Floor
         {
             curPos.x += Time.deltaTime * moveSpeed * -HALF;
             floor.position = curPos;
-            //floor.transform.Translate(Time.deltaTime * moveSpeed * -0.5f, 0, 0);
         }
 
     }

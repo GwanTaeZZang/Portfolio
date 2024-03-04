@@ -37,7 +37,6 @@ public class Player
         isDoublejump = false;
         curGorundY = 0;
         curPos = player.position;
-        //ChangePlayerAnimation(PlayerState.Walk);
     }
 
     public void MovePlayer()
@@ -52,7 +51,6 @@ public class Player
             DoubleJump();
 
         }
-        //Gravity();
     }
 
 
@@ -90,7 +88,6 @@ public class Player
                 ChangePlayerAnimation(PlayerState.Land);
             }
 
-            //player.Translate(0, curJumpPower, 0);
             if (curPos.y < curGorundY)
             {
                 ChangePlayerAnimation(PlayerState.Walk);
@@ -102,11 +99,6 @@ public class Player
             }
         }
     }
-
-    //public bool IsJump()
-    //{
-    //    return isJump;
-    //}
 
     private void SetPlayerPosY(float _posY)
     {

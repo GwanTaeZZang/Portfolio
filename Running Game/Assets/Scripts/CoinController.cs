@@ -10,57 +10,43 @@ public class CoinController
     private const float HALF = 0.5f;
     private const float CORRECTION_HALF = 0.25f;
     private const float COIN_INTERVAR = 1.5f;
-    //private const int INIT_BRONZE_COIN_IDX = CAPACITY * 0;
-    //private const int INIT_SILVER_COIN_IDX = CAPACITY * 1;
+    private const int COIN_SQUARE_PATTURN_FLOOR_BETWEEN = 3;
+    private const int COIN_SQUARE_PATTURN_WIDTH_MIN = 1;
+    private const int COIN_SQUARE_PATTURN_WIDTH_MAX = 6;
+    private const int COIN_SQUARE_PATTURN_HEIGHT_MIN = 1;
+    private const int COIN_SQUARE_PATTURN_HEIGHT_MAX = 3;
 
     public delegate void ScoreDelegate(int _score);
     public ScoreDelegate scoreEvnet;
 
     private Player player;
-    //private SpriteRenderer bronzeCoin;
-    //private SpriteRenderer silverCoin;
     private SpriteRenderer coinSpriteRenderer;
     private Vector2 coinSetVector = Vector2.zero;
 
     private int setCoinIdx;
-    //private int setBronzeCoinIdx;
-    //private int setSilverCoinIdx;
-    private int collisionCoinIdx;
     private int scoreAmount;
     private int coinListCount;
 
     private List<Coin> coinList = new List<Coin>();
-    //private List<Coin> silverCoinList = new List<Coin>();
 
     public CoinController(Transform _parent, Player _player, float _reposX, float _inScenePosX)
     {
         player = _player;
-        //bronzeCoin = Resources.Load<SpriteRenderer>("Prefab/Coin/BronzeCoin");
-        //silverCoin = Resources.Load<SpriteRenderer>("Prefab/Coin/SilverCoin");
         coinSpriteRenderer = Resources.Load<SpriteRenderer>("Prefab/Coin/Coin");
 
-        //CreateCoin(bronzeCoin, _parent, _reposX, _inScenePosX);
-        //CreateCoin(silverCoin, _parent, _reposX, _inScenePosX);
         CreateCoin(coinSpriteRenderer, _parent, _reposX, _inScenePosX);
 
 
-        collisionCoinIdx = 0;
         scoreAmount = 0;
-        //setBronzeCoinIdx = INIT_BRONZE_COIN_IDX;
-        //setSilverCoinIdx = INIT_SILVER_COIN_IDX;
         setCoinIdx = 0;
         coinListCount = coinList.Count;
 
-        //int idx = SetCoinSquarePattern(new Vector2 (4,4), 4, 4, setSilverCoinIdx + INIT_SILVER_COIN_IDX);
-        //setSilverCoinIdx = idx % CAPACITY + INIT_SILVER_COIN_IDX;
     }
 
     public void UpdateCoin()
     {
         MoveCoin();
         UpdateCollisionCoin();
-        //UpdateCurrentCollisionCoin();
-        //CheckCollisionCoin();
     }
 
     private void CreateCoin(SpriteRenderer _coinSprite, Transform _parent, float _reposX, float _inScenePosX)
@@ -76,7 +62,6 @@ public class CoinController
         for(int i = 0; i < coinListCount; i++)
         {
             coinList[i].Move();
-            //silverCoinList[i].Move();
         }
     }
 
@@ -96,9 +81,7 @@ public class CoinController
         int coinCount = (int)floorAABB.width;
         for (int i = 0; i < coinCount; i++)
         {
-            //float obstaclePosX = _obstacle.GetPos().x;
             float obstaclePosX = obstacleAABB.pos.x;
-            //Debug.Log("Cactus Pos = " + obstaclePosX);
 
             Coin coin = coinList[setCoinIdx];
             coinSetVector = Vector2.zero;
@@ -107,14 +90,10 @@ public class CoinController
 
             if (obstaclePosX - COIN_INTERVAR < coinSetVector.x && obstaclePosX + COIN_INTERVAR > coinSetVector.x)
             {
-                //Debug.Log("Dont Set Coin" + obstaclePosX);
                 float floorY = (floorAABB.pos.y + floorAABB.height * HALF) + (COIN_SIZE * HALF);
                 coinSetVector.y = floorY + JUMP_COIN_HEIGHT;
                 coin.SetPosition(coinSetVector);
                 coin.SetVisible(true);
-
-                //setBronzeCoinIdx++;
-                //setBronzeCoinIdx = setBronzeCoinIdx % CAPACITY + INIT_BRONZE_COIN_IDX;
 
                 setCoinIdx++;
                 setCoinIdx = setCoinIdx % CAPACITY;
@@ -122,16 +101,9 @@ public class CoinController
             }
             else
             {
-                //coinSetVector = Vector2.zero;
-                //Debug.Log(setCoinIdx);
-                //Coin coin = bronzeCoinList[setCoinIdx];
-                //coinSetVector.x = (floorAABB.pos.x - floorAABB.width * HALF) + (COIN_SIZE * HALF) + i;
                 coinSetVector.y = (floorAABB.pos.y + floorAABB.height * HALF) + (COIN_SIZE * HALF);
                 coin.SetPosition(coinSetVector);
                 coin.SetVisible(true);
-
-                //setBronzeCoinIdx++;
-                //setBronzeCoinIdx = setBronzeCoinIdx % CAPACITY + INIT_BRONZE_COIN_IDX;
 
                 setCoinIdx++;
                 setCoinIdx = setCoinIdx % CAPACITY;
@@ -150,9 +122,11 @@ public class CoinController
 
         Vector2 centerPos = floorAABB.pos;
         centerPos.x = (centerPos.x - floorAABB.width * HALF) - between * HALF;
-        centerPos.y += 3;
+        centerPos.y += COIN_SQUARE_PATTURN_FLOOR_BETWEEN;
 
-        SetCoinSquarePattern(centerPos, 3, 2);
+        int width = GetRandomValue(COIN_SQUARE_PATTURN_WIDTH_MIN, COIN_SQUARE_PATTURN_WIDTH_MAX);
+        int height = GetRandomValue(COIN_SQUARE_PATTURN_HEIGHT_MIN, COIN_SQUARE_PATTURN_HEIGHT_MAX);
+        SetCoinSquarePattern(centerPos, width, height);
 
     }
 
@@ -160,13 +134,9 @@ public class CoinController
     {
         int count = _width * _height;
         Vector2 startPos = _centerPos;
-        //startPos.x = (_centerPos.x - _width * HALF) + COIN_SIZE * HALF;
-        //startPos.y = (_centerPos.y + _height * HALF) - COIN_SIZE * HALF;
 
         for (int i =0; i < count; i++)
         {
-            //int idx = (_startCoinIdx + i) % CAPACITY + _initIdx;
-
             Coin curCoin = coinList[setCoinIdx];
 
             startPos.x = (_centerPos.x - _width * HALF) + COIN_SIZE * HALF;
@@ -210,10 +180,6 @@ public class CoinController
                     curCoin.SetVisible(false);
                     curCoin.SetIsInScene(false);
 
-                    //collisionCoinIdx++;
-                    //collisionCoinIdx = collisionCoinIdx % CAPACITY;
-
-
                     if(COIN_TYPE.bronze == curCoin.GetCoinType())
                     {
                         scoreAmount += (int)COIN_TYPE.bronze;
@@ -230,41 +196,11 @@ public class CoinController
         }
     }
 
-    private void UpdateCurrentCollisionCoin()
+
+
+    public int GetRandomValue(int _min, int _max)
     {
-        Coin curBronzeCoin = coinList[collisionCoinIdx];
-        if (player.GetPlayerPos().x - HALF > curBronzeCoin.GetPos().x + (COIN_SIZE * HALF))
-        {
-            collisionCoinIdx++;
-            collisionCoinIdx = collisionCoinIdx % CAPACITY;
-        }
+        return Random.Range(_min, _max);
     }
-
-    private void CheckCollisionCoin()
-    {
-        AABB curCoin = coinList[collisionCoinIdx].GetAABB();
-        float coinPosX = curCoin.pos.x;
-        float coinPosY = curCoin.pos.y;
-        float coinWidth = curCoin.width;
-        float coinHeight = curCoin.height;
-
-        if (coinPosX - coinWidth * CORRECTION_HALF < player.GetPlayerPos().x + CORRECTION_HALF &&
-            coinPosX + coinWidth * CORRECTION_HALF > player.GetPlayerPos().x - CORRECTION_HALF &&
-            coinPosY - coinHeight * CORRECTION_HALF < player.GetPlayerPos().y + CORRECTION_HALF &&
-            coinPosY + coinHeight * CORRECTION_HALF > player.GetPlayerPos().y - CORRECTION_HALF)
-        {
-            //Debug.Log("Coin Collision~~~~~~~~~~~");
-
-            coinList[collisionCoinIdx].SetVisible(false);
-            collisionCoinIdx++;
-            collisionCoinIdx = collisionCoinIdx % CAPACITY;
-
-            scoreAmount++;
-            scoreEvnet?.Invoke(scoreAmount);
-        }
-
-    }
-
-
 
 }

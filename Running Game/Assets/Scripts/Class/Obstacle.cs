@@ -4,7 +4,6 @@ using UnityEngine;
 
 public abstract class Obstacle
 {
-    //.. TODO :: move to baseclass
     protected const float HALF = 0.5f;
     protected const int SPRITE_RANDOM_MIN = 0;
     protected const int SPRITE_RANDOM_MAX = 3;
@@ -13,9 +12,7 @@ public abstract class Obstacle
     protected const int CACTUS_C_FLOOR_MINIMUM = 6;
     protected const int CREATE_POS_X = -5;
     protected const int CREATE_POS_Y = -5;
-    //..
 
-    //.. TODO :: move to baseclass
     protected float width;
     protected float height;
     protected float speed;
@@ -23,8 +20,6 @@ public abstract class Obstacle
     protected float inScenePosX;
     protected bool isInScene;
     protected bool isCollision;
-
-    //private SpriteRenderer obstacleRenderer;
 
     protected Transform obstacle;
 

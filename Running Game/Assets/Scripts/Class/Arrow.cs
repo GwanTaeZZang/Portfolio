@@ -16,14 +16,10 @@ public class Arrow : Obstacle
 
     public override void Initialized(SpriteRenderer _obstacle, Transform _parent, float _rePosX, float _inScenePosX)
     {
-        // 단일 화살 장애물 사용할 때 사용 
-        //arrowRenderer = GameObject.Instantiate<SpriteRenderer>(_obstacle, _parent);
-        //obstacle = arrowRenderer.transform;
         CreateArrowPattern(_obstacle, _parent);
         SetArrowPatternPosition(COUNT);
         obstacle = arrowPatternTransform;
 
-        //jumpDinoPos = obstacle.position;
         arrowPos = new Vector2(CREATE_POS_X, CREATE_POS_Y);
         obstacle.position = arrowPos;
 
@@ -49,6 +45,7 @@ public class Arrow : Obstacle
         {
             SpriteRenderer arrow = GameObject.Instantiate<SpriteRenderer>(_obstacle, arrowPatternTransform);
             arrowList.Add(arrow);
+
             if (i == 1)
             {
                 arrowRenderer = arrow;
@@ -66,6 +63,7 @@ public class Arrow : Obstacle
         {
             var arrow = arrowList[i];
             Vector2 arrowPos = arrow.transform.position;
+
             arrowPos.y = -(i * ARROW_HEIGHT_INTERVAL) + startPosY;
             arrow.transform.position = arrowPos;
         }
@@ -101,7 +99,6 @@ public class Arrow : Obstacle
         }
         else
         {
-            //Vector2 pos = obstacle.position;
             arrowPos.x += Time.deltaTime * speed * -HALF * 2;
             obstacle.position = arrowPos;
         }
@@ -120,8 +117,10 @@ public class Arrow : Obstacle
             return false;
         }
         AABB aabb = _floor.GetAABB();
+
         arrowPos.x = aabb.pos.x;
         arrowPos.y = GetRandomValue(aabb.pos.y, aabb.pos.y + 4);
+
         obstacle.position = arrowPos;
 
         RandomArrowPatternCount();

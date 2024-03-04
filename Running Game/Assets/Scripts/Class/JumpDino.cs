@@ -68,12 +68,6 @@ public class JumpDino : Obstacle
 
         jumpDinoPos = obstacle.position;
 
-        //float rndMinX = (aabb.pos.x + aabb.width * -HALF) + width * HALF + CACTUS_CORRECTION_POS_MIN;
-        //float rndMaxX = (aabb.pos.x + aabb.width * HALF) - width * HALF + CACTUS_CORRECTION_POS_MAX;
-
-        //pos.x = GetRandomValue(rndMinX, rndMaxX);
-        //pos.y = (aabb.pos.y + aabb.height * HALF) + height * HALF;
-
         float posX = aabb.pos.x - (aabb.width * 0.5f) - (_floor.GetBetween() * 0.5f);
 
         jumpDinoPos.x = posX;
