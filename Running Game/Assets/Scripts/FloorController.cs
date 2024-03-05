@@ -24,6 +24,7 @@ public class FloorController
 
     private List<Floor> floorList = new List<Floor>();
 
+    private SpriteRenderer[] floorPartsSpriteArr;
     private SpriteRenderer leftFloorPart;
     private SpriteRenderer middleFloorPart;
     private SpriteRenderer rightFloorPart;
@@ -37,11 +38,18 @@ public class FloorController
     private float repositionX;
 
 
+
     public FloorController(Transform _parent, Player _player, float _reposX, SetObstacleDelegate _event)
     {
-        leftFloorPart = Resources.Load<SpriteRenderer>("Prefab/Floor/Single Left");
-        middleFloorPart = Resources.Load<SpriteRenderer>("Prefab/Floor/Single Middle");
-        rightFloorPart = Resources.Load<SpriteRenderer>("Prefab/Floor/Single Right");
+        floorPartsSpriteArr = new SpriteRenderer[]
+        {
+            Resources.Load<SpriteRenderer>("Prefab/Floor/Single Left"),
+            Resources.Load<SpriteRenderer>("Prefab/Floor/Single Middle"),
+            Resources.Load<SpriteRenderer>("Prefab/Floor/Single Right")
+        };
+        //leftFloorPart = Resources.Load<SpriteRenderer>("Prefab/Floor/Single Left");
+        //middleFloorPart = Resources.Load<SpriteRenderer>("Prefab/Floor/Single Middle");
+        //rightFloorPart = Resources.Load<SpriteRenderer>("Prefab/Floor/Single Right");
 
         setObstacleEvent = _event;
 
@@ -53,7 +61,7 @@ public class FloorController
         SetFloorPosition();
     }
 
-    public void UpdateFloor()
+    public void FixedUpdateFloor()
     {
         UpdateCurrentCollisionFloor();
         CheckCollisionFloor();
@@ -62,12 +70,13 @@ public class FloorController
 
     private void CreateFloor()
     {
+        //.. TODO :: 이렇게 할거면 CAPACITY - 1 보 1부터 시작 i 조건 비교구문에서 계속 -1 연산 추가됨
         // Start Floor
-        floorList.Add(new Floor(leftFloorPart, middleFloorPart, rightFloorPart, floorParent, repositionX, true));
+        floorList.Add(new Floor(floorPartsSpriteArr, floorParent, repositionX, true));
 
         for (int i = 0; i < CAPACITY - 1; i++)
         {
-            floorList.Add(new Floor(leftFloorPart, middleFloorPart, rightFloorPart, floorParent, repositionX));
+            floorList.Add(new Floor(floorPartsSpriteArr, floorParent, repositionX));
         }
 
         floorListCount = floorList.Count;
@@ -75,22 +84,30 @@ public class FloorController
 
     private void SetFloorPosition()
     {
-        for (int i = 0; i < floorListCount; i++)
+        // start floor
+        floorList[0].SetFloorPosition(0, -1);
+        frontFloorIdx = 0;
+        collisionFloorIdx = 0;
+        lastFloor = floorList[0];
+
+        for (int i = 1; i < floorListCount; i++)
         {
             Floor floor = floorList[i];
-            if (i == 0)
-            {
-                // Start Floor
-                floor.SetFloorPosition(0, -1);
-                frontFloorIdx = i;
-                collisionFloorIdx = i;
-            }
-            else
-            {
-                ReSizeFloor(floor);
-                SetRandomFloorPos(floor);
-            }
+            //if (i == 0)
+            //{
+            //    // Start Floor
+            //    floor.SetFloorPosition(0, -1);
+            //    frontFloorIdx = i;
+            //    collisionFloorIdx = i;
+            //}
+            //else
+            //{
+            //}
+
+            ReSizeFloor(floor);
+            SetRandomFloorPos(floor);
             lastFloor = floor;
+
         }
     }
 
@@ -124,7 +141,10 @@ public class FloorController
 
         _floor.SetFloorPosition(posX + randomBetweenX, randomY);
 
-        float betweenX = (_floor.GetXPos() - _floor.GetFloorWidth() * HALF) - (lastFloor.GetXPos() + lastFloor.GetFloorWidth() * HALF);
+        //.. TODO :: 수식 정리  // correction
+        float newSetFloorLeftX = _floor.GetXPos() - _floor.GetFloorWidth() * HALF;
+        float lastFloorRightX = lastFloor.GetXPos() + lastFloor.GetFloorWidth() * HALF;
+        float betweenX = newSetFloorLeftX - lastFloorRightX;
         _floor.SetBetween(betweenX);
 
 

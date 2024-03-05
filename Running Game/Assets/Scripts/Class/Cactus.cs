@@ -15,9 +15,13 @@ public class Cactus : Obstacle
         obstacle = cactusRenderer.transform;
         obstacle.position = new Vector2(CREATE_POS_X, CREATE_POS_Y);
 
-        cactusSpriteArr = new Sprite[] { Resources.Load<Sprite>("Prefab/Sprite/Cactus/Cactus A"),
-                                         Resources.Load<Sprite>("Prefab/Sprite/Cactus/Cactus B"),
-                                         Resources.Load<Sprite>("Prefab/Sprite/Cactus/Cactus C")};
+        cactusSpriteArr = new Sprite[]
+        {
+            Resources.Load<Sprite>("Prefab/Sprite/Cactus/Cactus A"),
+            Resources.Load<Sprite>("Prefab/Sprite/Cactus/Cactus B"),
+            Resources.Load<Sprite>("Prefab/Sprite/Cactus/Cactus C")
+        };
+
         speed = cactusRenderer.sortingOrder;
         repositionX = _rePosX;
         inScenePosX = _inScenePosX;
@@ -27,28 +31,28 @@ public class Cactus : Obstacle
         SetVisible(false);
     }
 
-    public override void Move()
-    {
-        if (obstacle.position.x + width * HALF < repositionX)
-        {
-            SetVisible(false);
-            isInScene = false;
-            isCollision = false;
+    //public override void Move()
+    //{
+    //    if (obstacle.position.x + width * HALF < repositionX)
+    //    {
+    //        SetVisible(false);
+    //        isInScene = false;
+    //        isCollision = false;
 
-        }
-        else
-        {
-            Vector2 pos = obstacle.position;
-            pos.x += Time.deltaTime * speed * -HALF;
-            obstacle.position = pos;
-        }
+    //    }
+    //    else
+    //    {
+    //        Vector2 pos = obstacle.position;
+    //        pos.x += Time.deltaTime * speed * -HALF;
+    //        obstacle.position = pos;
+    //    }
 
-        if (obstacle.position.x < inScenePosX && !isCollision)
-        {
-            isInScene = true;
-        }
+    //    if (obstacle.position.x < inScenePosX && !isCollision)
+    //    {
+    //        isInScene = true;
+    //    }
 
-    }
+    //}
 
     private void ChangeRandomSprite()
     {

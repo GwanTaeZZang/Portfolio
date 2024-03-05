@@ -21,10 +21,14 @@ public class InGameSceneController : MonoBehaviour
     private float repositionX;
     private float inScenePosX;
 
+    private Camera myCamera;
     private void Awake()
     {
-        repositionX = Camera.main.ScreenToWorldPoint(new Vector3(0, 0, 0)).x;
-        inScenePosX = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width, 0, 0)).x;
+        //.. TODO :: Camera.main 캐싱 습관화  // correction
+        myCamera = Camera.main;
+        repositionX = myCamera.ScreenToWorldPoint(new Vector3(0, 0, 0)).x;
+        inScenePosX = myCamera.ScreenToWorldPoint(new Vector3(Screen.width, 0, 0)).x;
+
         player = new Player(playerObj);
 
         coinCtrl = new CoinController(coinParent, player, repositionX, inScenePosX);
@@ -38,14 +42,17 @@ public class InGameSceneController : MonoBehaviour
 
     private void Update()
     {
-        player.MovePlayer();
+        player.UpdatePlayer();
     }
 
     private void FixedUpdate()
     {
-        floorCtrl.UpdateFloor();
-        obstacleCtrl.ObstacleUpdate();
-        coinCtrl.UpdateCoin();
+        //.. TODO :: Player RenderUpdate는 Update고 나머지는 왜 Fixed? 일치화 시켜야함  // correction
+        floorCtrl.FixedUpdateFloor();
+        obstacleCtrl.FixedObstacleUpdate();
+        coinCtrl.FixedUpdateCoin();
+        //..
+
         player.Gravity();
     }
 

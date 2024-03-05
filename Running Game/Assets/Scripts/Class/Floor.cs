@@ -14,6 +14,9 @@ public class Floor
 {
     private const float START_FLOOR_SIZE = 20f;
     private const float HALF = 0.5f;
+    private const int FLOOR_PART_LEFT = 0;
+    private const int FLOOR_PART_MIDDLE = 1;
+    private const int FLOOR_PART_RIGHT = 2;
 
     private Transform floor;
 
@@ -30,7 +33,8 @@ public class Floor
     private Vector2 curPos = Vector2.zero;
     private Rect floorRect;
 
-    public Floor(SpriteRenderer _leftFloorPart, SpriteRenderer _middleFloorPart, SpriteRenderer _rightFloorPart, Transform _floorGroup , float _reposX, bool _isStartFloor = false)
+    //.. TODO :: Parameter 가 너무 많음, 복합 자료형 이용해서 줄일 수 있도록  // correction
+    public Floor(SpriteRenderer[] _floorPartArr, Transform _floorGroup , float _reposX, bool _isStartFloor = false)
     {
 
         floor = new GameObject("Floor").transform;
@@ -41,9 +45,9 @@ public class Floor
 
         floorRect = new Rect(0, 0, 0, 0);
 
-        leftSingleFloor = GameObject.Instantiate<SpriteRenderer>(_leftFloorPart, floor);
-        middleSingleFloor = GameObject.Instantiate<SpriteRenderer>(_middleFloorPart, floor);
-        rightSingleFloor = GameObject.Instantiate<SpriteRenderer>(_rightFloorPart, floor);
+        leftSingleFloor = GameObject.Instantiate<SpriteRenderer>(_floorPartArr[FLOOR_PART_LEFT], floor);
+        middleSingleFloor = GameObject.Instantiate<SpriteRenderer>(_floorPartArr[FLOOR_PART_MIDDLE], floor);
+        rightSingleFloor = GameObject.Instantiate<SpriteRenderer>(_floorPartArr[FLOOR_PART_RIGHT], floor);
 
         moveSpeed = leftSingleFloor.sortingOrder;
         isStartFloor = _isStartFloor;

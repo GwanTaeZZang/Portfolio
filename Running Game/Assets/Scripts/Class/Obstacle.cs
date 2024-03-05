@@ -23,9 +23,32 @@ public abstract class Obstacle
 
     protected Transform obstacle;
 
-    public abstract void Move();
+    //public abstract void Move();
     public abstract bool SetPosition(Floor _floor);
     public abstract void Initialized(SpriteRenderer _obstacle, Transform _parent, float _rePosX, float _inScenePosX);
+
+    public virtual void Move()
+    {
+        if (obstacle.position.x + width * HALF < repositionX)
+        {
+            SetVisible(false);
+            isInScene = false;
+            isCollision = false;
+
+        }
+        else
+        {
+            Vector2 pos = obstacle.position;
+            pos.x += Time.deltaTime * speed * -HALF;
+            obstacle.position = pos;
+        }
+
+        if (obstacle.position.x < inScenePosX && !isCollision)
+        {
+            isInScene = true;
+        }
+
+    }
 
     public AABB GetAABB()
     {

@@ -49,7 +49,7 @@ public class ObstacleController
         //Debug.Log(count);
     }
 
-    public void ObstacleUpdate()
+    public void FixedObstacleUpdate()
     {
         MoveObstacle();
         UpdateCollisionObstacle();

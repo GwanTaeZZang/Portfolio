@@ -6,6 +6,10 @@ public class Arrow : Obstacle
 {
     private const int COUNT = 5;
     private const float ARROW_HEIGHT_INTERVAL = 0.4f;
+    private const int ARROW_PATTERN_COUNT_MIN = 1;
+    private const int ARROW_PATTERN_COUNT_MAX = 6;
+    private const int CREATE_ARROW_PERCENTAGE_MIN = 0;
+    private const int CREATE_ARROW_PERCENTAGE_MAX = 2;
 
     private Transform arrowPatternTransform;
     private SpriteRenderer arrowRenderer;
@@ -71,48 +75,53 @@ public class Arrow : Obstacle
 
     private void RandomArrowPatternCount()
     {
-        int count = GetRandomValue(1, 6);
+        //.. TODO :: 리터럴 상수 // correction
+        int count = GetRandomValue(ARROW_PATTERN_COUNT_MIN, ARROW_PATTERN_COUNT_MAX);
         for(int i =0; i < COUNT; i++)
         {
-            if(i < count)
-            {
-                arrowList[i].gameObject.SetActive(true);
-            }
-            else
-            {
-                arrowList[i].gameObject.SetActive(false);
-            }
+            //.. TODO :: 한줄로 변경가능  // correction
+            arrowList[i].gameObject.SetActive(i < count ? true : false);
+            //if(i < count)
+            //{
+            //    arrowList[i].gameObject.SetActive(true);
+            //}
+            //else
+            //{
+            //    arrowList[i].gameObject.SetActive(false);
+            //}
+
         }
         SetArrowPatternPosition(count);
     }
 
 
 
-    public override void Move()
-    {
-        if (arrowPos.x + width * HALF < repositionX)
-        {
-            SetVisible(false);
-            isInScene = false;
-            isCollision = false;
+    //public override void Move()
+    //{
+    //    if (arrowPos.x + width * HALF < repositionX)
+    //    {
+    //        SetVisible(false);
+    //        isInScene = false;
+    //        isCollision = false;
 
-        }
-        else
-        {
-            arrowPos.x += Time.deltaTime * speed * -HALF * 2;
-            obstacle.position = arrowPos;
-        }
+    //    }
+    //    else
+    //    {
+    //        arrowPos.x += Time.deltaTime * speed * -HALF * 2;
+    //        obstacle.position = arrowPos;
+    //    }
 
-        if (obstacle.position.x < inScenePosX && !isCollision)
-        {
-            isInScene = true;
-        }
+    //    if (obstacle.position.x < inScenePosX && !isCollision)
+    //    {
+    //        isInScene = true;
+    //    }
 
-    }
+    //}
 
     public override bool SetPosition(Floor _floor)
     {
-        if(GetRandomValue(0,2) == 0)
+        //.. TODO :: 리터럴 상수  // correction
+        if(GetRandomValue(CREATE_ARROW_PERCENTAGE_MIN, CREATE_ARROW_PERCENTAGE_MAX) == 0)
         {
             return false;
         }

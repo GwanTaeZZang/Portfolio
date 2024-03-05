@@ -17,8 +17,9 @@ public class Player
 
     private Transform player;
 
+    //.. TODO :: isJump / isDoubleJump 하나의 변수로 합쳐서 사용 할 수 있도록  // correction
     private bool isJump;
-    private bool isDoublejump;
+    //private bool isDoublejump;
     private bool isGround;
     private float curJumpPower;
     private float curGorundY;
@@ -35,13 +36,13 @@ public class Player
         anim = player.GetComponent<Animator>();
 
         isJump = false;
-        isDoublejump = false;
+        //isDoublejump = false;
         curGorundY = 0;
         curPos = player.position;
         playerRect = new Rect(curPos.x - 1 * 0.5f, curPos.y + 1 * 0.5f, 1, 1);
     }
 
-    public void MovePlayer()
+    public void UpdatePlayer()
     {
         if (Input.GetKeyDown("space") && !isJump)
         {
@@ -68,10 +69,10 @@ public class Player
 
     public void DoubleJump()
     {
-        if (!isDoublejump && isJump)
+        if (isJump)
         {
             curJumpPower = JUMP_POWER * DOUBLE_JUMP_POWER;
-            isDoublejump = true;
+            //isDoublejump = true;
             ChangePlayerAnimation(PlayerState.Jump);
         }
     }
@@ -85,7 +86,7 @@ public class Player
             curPos.y += curJumpPower;
             player.position = curPos;
 
-            if(curJumpPower < 0 && isJump)
+            if(curJumpPower < 0 && isJump && playerState == PlayerState.Jump)
             {
                 ChangePlayerAnimation(PlayerState.Land);
             }
@@ -94,7 +95,7 @@ public class Player
             {
                 ChangePlayerAnimation(PlayerState.Walk);
                 isJump = false;
-                isDoublejump = false;
+                //isDoublejump = false;
                 curPos.y = curGorundY;
                 player.transform.position = curPos;
                 curJumpPower = 0;
@@ -108,12 +109,13 @@ public class Player
         player.position = curPos;
     }
 
+    //.. TODO :: Animation 상태 변환은 Event 형식으로 처리 할 수 있게 변경 (한번만 들어올 수 있게) // correction
     private void ChangePlayerAnimation(PlayerState _state)
     {
-        if (playerState == _state)
-        {
-            return;
-        }
+        //if (playerState == _state)
+        //{
+        //    return;
+        //}
         playerState = _state;
         anim.SetInteger("State", (int)_state);
     }

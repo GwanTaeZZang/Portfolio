@@ -34,25 +34,27 @@ public class JumpDino : Obstacle
 
     public override void Move()
     {
+        ////.. TODO :: base로 올리기 가능  // correction
+        //if (jumpDinoPos.x + width * HALF < repositionX)
+        //{
+        //    SetVisible(false);
+        //    isInScene = false;
+        //    isCollision = false;
+        //}
+        //else
+        //{
+        //    //Vector2 pos = obstacle.position;
+        //    jumpDinoPos.x += Time.deltaTime * speed * -HALF;
+        //    obstacle.position = jumpDinoPos;
+        //}
 
-        if (jumpDinoPos.x + width * HALF < repositionX)
-        {
-            SetVisible(false);
-            isInScene = false;
-            isCollision = false;
-        }
-        else
-        {
-            //Vector2 pos = obstacle.position;
-            jumpDinoPos.x += Time.deltaTime * speed * -HALF;
-            obstacle.position = jumpDinoPos;
-        }
+        //if (obstacle.position.x < inScenePosX && !isCollision)
+        //{
+        //    isInScene = true;
+        //}
 
-        if (obstacle.position.x < inScenePosX && !isCollision)
-        {
-            isInScene = true;
-        }
 
+        base.Move();
 
         Gravity();
     }
@@ -84,14 +86,17 @@ public class JumpDino : Obstacle
         if (isJump)
         {
             curJumpPower -= Time.deltaTime * GRAVITY;
+            jumpDinoPos = obstacle.position;
             jumpDinoPos.y += curJumpPower;
 
             if(REJUMP_POS_Y > jumpDinoPos.y)
             {
                 isJump = false;
                 jumpDinoPos.y = REJUMP_POS_Y;
+                obstacle.position = jumpDinoPos;
                 curJumpPower = 0;
             }
+            obstacle.position = jumpDinoPos;
         }
         else
         {

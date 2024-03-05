@@ -32,6 +32,7 @@ public class CoinController
     public CoinController(Transform _parent, Player _player, float _reposX, float _inScenePosX)
     {
         player = _player;
+
         coinSpriteRenderer = Resources.Load<SpriteRenderer>("Prefab/Coin/Coin");
 
         CreateCoin(coinSpriteRenderer, _parent, _reposX, _inScenePosX);
@@ -43,7 +44,7 @@ public class CoinController
 
     }
 
-    public void UpdateCoin()
+    public void FixedUpdateCoin()
     {
         MoveCoin();
         UpdateCollisionCoin();
