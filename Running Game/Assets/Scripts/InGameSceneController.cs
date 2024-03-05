@@ -10,7 +10,9 @@ public class InGameSceneController : MonoBehaviour
     [SerializeField] private Transform floorParent;
     [SerializeField] private Transform obstacleParent;
     [SerializeField] private Transform coinParent;
+    // View
     [SerializeField] private Text scoreAmount;
+    [SerializeField] private Image[] heartArr;
 
     private FloorController floorCtrl;
     private ObstacleController obstacleCtrl;
@@ -21,15 +23,24 @@ public class InGameSceneController : MonoBehaviour
     private float repositionX;
     private float inScenePosX;
 
+    private int curHeartCount;
+    private Color offHeartColor;
+    private Color onHeartColor;
+
+    
+    
+
     private Camera myCamera;
     private void Awake()
     {
+
         //.. TODO :: Camera.main 캐싱 습관화  // correction
         myCamera = Camera.main;
         repositionX = myCamera.ScreenToWorldPoint(new Vector3(0, 0, 0)).x;
         inScenePosX = myCamera.ScreenToWorldPoint(new Vector3(Screen.width, 0, 0)).x;
 
-        player = new Player(playerObj);
+        curHeartCount = heartArr.Length;
+        player = new Player(playerObj, curHeartCount);
 
         coinCtrl = new CoinController(coinParent, player, repositionX, inScenePosX);
 
@@ -37,7 +48,12 @@ public class InGameSceneController : MonoBehaviour
 
         floorCtrl = new FloorController(floorParent, player, repositionX, SetObstacleEvent);
 
-        coinCtrl.scoreEvnet = UpdateScore;
+        coinCtrl.onScoreEvnet = OnUpdateScoreText;
+        obstacleCtrl.onCollisionEvent = OnUpdateHeartUI;
+
+
+        ColorUtility.TryParseHtmlString("#FFFFFF", out onHeartColor);
+        ColorUtility.TryParseHtmlString("#747474", out offHeartColor);
     }
 
     private void Update()
@@ -66,8 +82,33 @@ public class InGameSceneController : MonoBehaviour
         coinCtrl.SetCoinPosition(_floor, _obstacle);
     }
 
-    private void UpdateScore(int _score)
+    private void OnUpdateScoreText(int _score)
     {
         scoreAmount.text = _score.ToString();
-    }    
+    }
+    private void OnUpdateHeartUI()
+    {
+        // 줄일 수 있을거 같음 나중에 다시확인
+
+        int playerHp = player.GetHp();
+
+        if(curHeartCount > playerHp)
+        {
+            // 감소
+            heartArr[curHeartCount - 1].color = offHeartColor;
+            curHeartCount--;
+            Debug.Log("플레이어 피 : " + playerHp);
+        }
+        else if(playerHp > heartArr.Length)
+        {
+            player.SetHp(curHeartCount);
+        }
+        else
+        {
+            // 증가
+            curHeartCount++;
+            heartArr[curHeartCount - 1].color = onHeartColor;
+        }
+
+    }
 }

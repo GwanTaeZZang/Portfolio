@@ -14,6 +14,10 @@ public class ObstacleController
     public delegate void SetCoinDelegate(Floor _floor, Obstacle _obstacle);
     public SetCoinDelegate setCoinEvent;
 
+    public delegate void OnCollisionDelegate();
+    public OnCollisionDelegate onCollisionEvent;
+
+
     private List<Obstacle> obstacleList;
     private SpriteRenderer cactus;
     private SpriteRenderer dino;
@@ -164,6 +168,9 @@ public class ObstacleController
                     Debug.Log("Collision~~~~~~~~~~~");
                     curObstacle.SetIsCollision(true);
                     curObstacle.SetIsInScene(false);
+
+                    player.SetHp(-1);
+                    onCollisionEvent?.Invoke();
                 }
 
             }

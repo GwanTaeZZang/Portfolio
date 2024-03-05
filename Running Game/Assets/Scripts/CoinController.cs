@@ -17,7 +17,7 @@ public class CoinController
     private const int COIN_SQUARE_PATTURN_HEIGHT_MAX = 4;
 
     public delegate void ScoreDelegate(int _score);
-    public ScoreDelegate scoreEvnet;
+    public ScoreDelegate onScoreEvnet;
 
     private Player player;
     private SpriteRenderer coinSpriteRenderer;
@@ -195,7 +195,7 @@ public class CoinController
                     curCoin.SetIsInScene(false);
 
                     scoreAmount += (int)curCoin.GetCoinType();
-                    scoreEvnet?.Invoke(scoreAmount);
+                    onScoreEvnet?.Invoke(scoreAmount);
                 }
             }
         }

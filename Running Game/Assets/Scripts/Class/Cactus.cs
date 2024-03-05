@@ -17,9 +17,9 @@ public class Cactus : Obstacle
 
         cactusSpriteArr = new Sprite[]
         {
-            Resources.Load<Sprite>("Prefab/Sprite/Cactus/Cactus A"),
-            Resources.Load<Sprite>("Prefab/Sprite/Cactus/Cactus B"),
-            Resources.Load<Sprite>("Prefab/Sprite/Cactus/Cactus C")
+            Resources.Load<Sprite>("Sprite/Cactus/Cactus A"),
+            Resources.Load<Sprite>("Sprite/Cactus/Cactus B"),
+            Resources.Load<Sprite>("Sprite/Cactus/Cactus C")
         };
 
         speed = cactusRenderer.sortingOrder;

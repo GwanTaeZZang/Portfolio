@@ -16,6 +16,8 @@ public class Player
     private const float DOUBLE_JUMP_POWER = 0.9f;
 
     private Transform player;
+    private int maxhp;
+    private int hp;
 
     //.. TODO :: isJump / isDoubleJump 하나의 변수로 합쳐서 사용 할 수 있도록  // correction
     private bool isJump;
@@ -30,9 +32,11 @@ public class Player
     private Vector2 curPos;
     private Rect playerRect;
 
-    public Player(Transform _player)
+    public Player(Transform _player, int _hp)
     {
         player = _player;
+        //hp = _hp;
+        maxhp = hp = _hp;
         anim = player.GetComponent<Animator>();
 
         isJump = false;
@@ -150,5 +154,23 @@ public class Player
         }
     }
 
-    
+    public void SetHp(int _amount)
+    {
+        if(hp + _amount > maxhp)
+        {
+            Debug.Log("체력이 가득 참  ");
+            return;
+        }
+        if(hp + _amount == 0)
+        {
+            Debug.Log("die");
+            return;
+        }
+        hp += _amount;
+    }
+
+    public int GetHp()
+    {
+        return hp;
+    }
 }
