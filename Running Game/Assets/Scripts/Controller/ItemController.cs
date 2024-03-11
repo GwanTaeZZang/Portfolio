@@ -6,6 +6,7 @@ public class ItemController
 {
     private const int CAPACITY = 10;
     private const int INIT_HEART_IDX = CAPACITY * 0;
+    private const int INIT_MAGNET_IDX = CAPACITY * 1;
     private const float HALF = 0.5f;
     private const int SET_RANDOM_ITEM_MIN = 0;
     private const int SET_RANDOM_ITEM_MAX = 10;
@@ -19,7 +20,9 @@ public class ItemController
     private Player player;
 
     private SpriteRenderer heartItmeSpriteRenderer;
+    private SpriteRenderer magnetItmeSpriteRenderer;
     private int setHeartIdx = INIT_HEART_IDX;
+    private int setMagnetIdx = INIT_MAGNET_IDX;
     private int itemListCount;
 
     public ItemController(Transform _parent, Player _player, float _reposX, float _inScenePosX)
@@ -28,8 +31,10 @@ public class ItemController
         player = _player;
 
         heartItmeSpriteRenderer = Resources.Load<SpriteRenderer>("Prefab/Item/Heart");
+        magnetItmeSpriteRenderer = Resources.Load<SpriteRenderer>("Prefab/Item/Magnet");
 
         CreateItem<HeartItem>(heartItmeSpriteRenderer, _parent, _reposX, _inScenePosX);
+        CreateItem<MagnetItem>(magnetItmeSpriteRenderer, _parent, _reposX, _inScenePosX);
 
         itemListCount = itemList.Count;
     }
@@ -53,15 +58,16 @@ public class ItemController
     public void SetRandomItemPos(Floor _floor)
     {
 
-        SetRandomHeartPos(_floor);
+        //SetRandomHeartPos(_floor);
 
-        //int percentage = GetRandomValue(SET_RANDOM_ITEM_MIN, SET_RANDOM_ITEM_MAX);
+        int percentage = GetRandomValue(SET_RANDOM_ITEM_MIN, SET_RANDOM_ITEM_MAX);
 
-        //if (percentage == 0)
-        //{
-        //    int type = GetRandomValue(SET_RANDOM_ITEM_TYPE_MIN, SET_RANDOM_ITEM_TYPE_MAX);
-        //    SetRandomHeartPos(_floor);
-        //}
+        if (percentage == 0)
+        {
+            int type = GetRandomValue(SET_RANDOM_ITEM_TYPE_MIN, SET_RANDOM_ITEM_TYPE_MAX);
+            SetRandomHeartPos(_floor);
+            SetRandomMagnetPos(_floor);
+        }
     }
 
     private void SetRandomHeartPos(Floor _floor)
@@ -70,7 +76,12 @@ public class ItemController
         setHeartIdx++;
         setHeartIdx = (setHeartIdx % CAPACITY) + INIT_HEART_IDX;
     }
-
+    private void SetRandomMagnetPos(Floor _floor)
+    {
+        itemList[setMagnetIdx].SetPosition(_floor);
+        setMagnetIdx++;
+        setMagnetIdx = (setMagnetIdx % CAPACITY) + INIT_MAGNET_IDX;
+    }
 
 
 
@@ -114,9 +125,9 @@ public class ItemController
     }
 
 
-    public int GetRandomValue(float _min, float _max)
+    public int GetRandomValue(int _min, int _max)
     {
-        return (int)Random.Range(_min, _max);
+        return Random.Range(_min, _max);
     }
 
 }
