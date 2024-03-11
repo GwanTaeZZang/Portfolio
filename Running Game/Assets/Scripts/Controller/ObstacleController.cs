@@ -11,8 +11,8 @@ public class ObstacleController
     private const int INIT_JUMPDINO_IDX = CAPACITY * 1;
     private const int INIT_ARROW_IDX = CAPACITY * 2;
 
-    public delegate void SetCoinDelegate(Floor _floor, Obstacle _obstacle);
-    public SetCoinDelegate setCoinEvent;
+    public delegate void SetObstacleDelegate(Floor _floor, Obstacle _obstacle);
+    public SetObstacleDelegate setObstacleEvent;
 
     public delegate void OnCollisionDelegate();
     public OnCollisionDelegate onCollisionEvent;
@@ -29,13 +29,13 @@ public class ObstacleController
     private int setJumpDinoIdx;
     private int setArrowIdx;
 
-    public ObstacleController(Transform _parent, Player _player , float _reposX , float _inScenePosX, SetCoinDelegate _event)
+    public ObstacleController(Transform _parent, Player _player , float _reposX , float _inScenePosX, SetObstacleDelegate _event)
     {
         cactus = Resources.Load<SpriteRenderer>("Prefab/Obstacle/Cactus/Cactus");
         dino = Resources.Load<SpriteRenderer>("Prefab/Obstacle/Dino/Dino");
         arrow = Resources.Load<SpriteRenderer>("Prefab/Obstacle/Arrow/Arrow");
 
-        setCoinEvent = _event;
+        setObstacleEvent = _event;
 
         obstacleList = new List<Obstacle>();
         player = _player;
@@ -112,7 +112,7 @@ public class ObstacleController
                 return;
             }
         }
-        setCoinEvent?.Invoke(_floor, obstacle);
+        setObstacleEvent?.Invoke(_floor, obstacle);
 
     }
     private void SetRandomJumpDinoPos(Floor _floor)

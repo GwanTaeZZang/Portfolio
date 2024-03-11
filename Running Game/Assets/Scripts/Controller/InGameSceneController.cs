@@ -10,6 +10,7 @@ public class InGameSceneController : MonoBehaviour
     [SerializeField] private Transform floorParent;
     [SerializeField] private Transform obstacleParent;
     [SerializeField] private Transform coinParent;
+    [SerializeField] private Transform itemParent;
     // View
     [SerializeField] private Text scoreAmount;
     [SerializeField] private Image[] heartArr;
@@ -17,6 +18,7 @@ public class InGameSceneController : MonoBehaviour
     private FloorController floorCtrl;
     private ObstacleController obstacleCtrl;
     private CoinController coinCtrl;
+    private ItemController itemCtrl;
 
     private Player player;
 
@@ -44,9 +46,11 @@ public class InGameSceneController : MonoBehaviour
 
         coinCtrl = new CoinController(coinParent, player, repositionX, inScenePosX);
 
-        obstacleCtrl = new ObstacleController(obstacleParent, player, repositionX, inScenePosX, SetCoinEvnent);
+        obstacleCtrl = new ObstacleController(obstacleParent, player, repositionX, inScenePosX, SetObstacleEvnent);
 
-        floorCtrl = new FloorController(floorParent, player, repositionX, SetObstacleEvent);
+        itemCtrl = new ItemController(itemParent, player, repositionX, inScenePosX);
+
+        floorCtrl = new FloorController(floorParent, player, repositionX, SetFloorEvent);
 
         coinCtrl.onScoreEvnet = OnUpdateScoreText;
         obstacleCtrl.onCollisionEvent = OnUpdateHeartUI;
@@ -67,17 +71,19 @@ public class InGameSceneController : MonoBehaviour
         floorCtrl.FixedUpdateFloor();
         obstacleCtrl.FixedObstacleUpdate();
         coinCtrl.FixedUpdateCoin();
+        itemCtrl.FixedItemUpdate();
         //..
 
         player.Gravity();
     }
 
-    private void SetObstacleEvent(Floor _floor)
+    private void SetFloorEvent(Floor _floor)
     {
         obstacleCtrl.SetRandomObstaclePos(_floor);
+        itemCtrl.SetRandomItemPos(_floor);
     }
 
-    private void SetCoinEvnent(Floor _floor, Obstacle _obstacle)
+    private void SetObstacleEvnent(Floor _floor, Obstacle _obstacle)
     {
         coinCtrl.SetCoinPosition(_floor, _obstacle);
     }

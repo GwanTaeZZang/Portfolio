@@ -19,8 +19,8 @@ public class FloorController
     private const int PLAYER_WIDTH = 1;
     private const int PLAYER_HEIGHT = 1;
 
-    public delegate void SetObstacleDelegate(Floor _floor);
-    public SetObstacleDelegate setObstacleEvent;
+    public delegate void SetFloorDelegate(Floor _floor);
+    public SetFloorDelegate setFloorEvent;
 
     private List<Floor> floorList = new List<Floor>();
 
@@ -39,7 +39,7 @@ public class FloorController
 
 
 
-    public FloorController(Transform _parent, Player _player, float _reposX, SetObstacleDelegate _event)
+    public FloorController(Transform _parent, Player _player, float _reposX, SetFloorDelegate _event)
     {
         floorPartsSpriteArr = new SpriteRenderer[]
         {
@@ -51,7 +51,7 @@ public class FloorController
         //middleFloorPart = Resources.Load<SpriteRenderer>("Prefab/Floor/Single Middle");
         //rightFloorPart = Resources.Load<SpriteRenderer>("Prefab/Floor/Single Right");
 
-        setObstacleEvent = _event;
+        setFloorEvent = _event;
 
         floorParent = _parent;
         player = _player;
@@ -148,7 +148,7 @@ public class FloorController
         _floor.SetBetween(betweenX);
 
 
-        setObstacleEvent?.Invoke(_floor);
+        setFloorEvent?.Invoke(_floor);
     }
 
     private void UpdateCurrentCollisionFloor()
