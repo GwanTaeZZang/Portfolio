@@ -19,9 +19,12 @@ public class Player
     private int maxhp;
     private int hp;
 
+    public delegate void OnCollisionDelegate();
+    public OnCollisionDelegate onObstacleCollisionEvent;
+
     //.. TODO :: isJump / isDoubleJump 하나의 변수로 합쳐서 사용 할 수 있도록  // correction
     private bool isJump;
-    //private bool isDoublejump;
+    private bool isDoublejump;
     private bool isGround;
     private float curJumpPower;
     private float curGorundY;
@@ -40,7 +43,7 @@ public class Player
         anim = player.GetComponent<Animator>();
 
         isJump = false;
-        //isDoublejump = false;
+        isDoublejump = false;
         curGorundY = 0;
         curPos = player.position;
         playerRect = new Rect(curPos.x - 1 * 0.5f, curPos.y + 1 * 0.5f, 1, 1);
@@ -73,10 +76,10 @@ public class Player
 
     public void DoubleJump()
     {
-        if (isJump)
+        if (isJump && !isDoublejump)
         {
             curJumpPower = JUMP_POWER * DOUBLE_JUMP_POWER;
-            //isDoublejump = true;
+            isDoublejump = true;
             ChangePlayerAnimation(PlayerState.Jump);
         }
     }
@@ -99,7 +102,7 @@ public class Player
             {
                 ChangePlayerAnimation(PlayerState.Walk);
                 isJump = false;
-                //isDoublejump = false;
+                isDoublejump = false;
                 curPos.y = curGorundY;
                 player.transform.position = curPos;
                 curJumpPower = 0;
@@ -166,6 +169,8 @@ public class Player
             Debug.Log("die");
         }
         hp += _amount;
+
+        onObstacleCollisionEvent?.Invoke();
     }
 
     public int GetHp()

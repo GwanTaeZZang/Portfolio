@@ -50,6 +50,7 @@ public class HeartItem : Item
     public override void CollisionItem(Player _player)
     {
         Debug.Log("Collision Item");
+        _player.SetHp(1);
     }
 
 }

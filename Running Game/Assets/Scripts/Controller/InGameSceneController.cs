@@ -53,7 +53,8 @@ public class InGameSceneController : MonoBehaviour
         floorCtrl = new FloorController(floorParent, player, repositionX, SetFloorEvent);
 
         coinCtrl.onScoreEvnet = OnUpdateScoreText;
-        obstacleCtrl.onCollisionEvent = OnUpdateHeartUI;
+
+        player.onObstacleCollisionEvent = OnUpdateHeartUI;
 
 
         ColorUtility.TryParseHtmlString("#FFFFFF", out onHeartColor);

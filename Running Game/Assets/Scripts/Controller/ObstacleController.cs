@@ -14,8 +14,8 @@ public class ObstacleController
     public delegate void SetObstacleDelegate(Floor _floor, Obstacle _obstacle);
     public SetObstacleDelegate setObstacleEvent;
 
-    public delegate void OnCollisionDelegate();
-    public OnCollisionDelegate onCollisionEvent;
+    //public delegate void OnCollisionDelegate();
+    //public OnCollisionDelegate onCollisionEvent;
 
 
     private List<Obstacle> obstacleList;
@@ -170,7 +170,7 @@ public class ObstacleController
                     curObstacle.SetIsInScene(false);
 
                     player.SetHp(-1);
-                    onCollisionEvent?.Invoke();
+                    //onCollisionEvent?.Invoke();
                 }
 
             }
