@@ -156,15 +156,14 @@ public class Player
 
     public void SetHp(int _amount)
     {
-        if(hp + _amount > maxhp)
+        if(hp + _amount > maxhp || hp + _amount < 0)
         {
-            Debug.Log("체력이 가득 참  ");
+            Debug.Log("체력이 가득 차거나 마이너스임  ");
             return;
         }
         if(hp + _amount == 0)
         {
             Debug.Log("die");
-            return;
         }
         hp += _amount;
     }

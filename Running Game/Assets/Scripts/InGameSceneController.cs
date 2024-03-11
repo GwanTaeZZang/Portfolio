@@ -92,6 +92,11 @@ public class InGameSceneController : MonoBehaviour
 
         int playerHp = player.GetHp();
 
+        if(playerHp == 0)
+        {
+            return;
+        }
+
         if(curHeartCount > playerHp)
         {
             // 감소
