@@ -109,7 +109,7 @@ public class InGameSceneController : MonoBehaviour
             // 감소
             heartArr[curHeartCount - 1].color = offHeartColor;
             curHeartCount--;
-            Debug.Log("플레이어 피 : " + playerHp);
+            //Debug.Log("플레이어 피 : " + playerHp);
         }
         else if(playerHp > heartArr.Length)
         {

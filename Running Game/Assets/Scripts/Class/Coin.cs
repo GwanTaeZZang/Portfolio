@@ -13,6 +13,7 @@ public class Coin
     private const int CREATE_POS_X = 5;
     private const int CREATE_POS_Y = 5;
     private const float HALF = 0.5f;
+    private const int MAGNETSPEED = 2;
     private const string COIN_GRADE = "CoinGrade";
 
     private float width = 1;
@@ -61,6 +62,27 @@ public class Coin
         }
 
         if(coin.position.x < inScenePosX && coin.gameObject.activeSelf)
+        {
+            isInScene = true;
+        }
+    }
+
+    public void MoveToTarget(Player _player)
+    {
+        if (coin.position.x + width * HALF < repositionX)
+        {
+            isInScene = false;
+            SetVisible(false);
+        }
+        else
+        {
+            Vector2 distance = _player.GetPlayerPos() - coinPos;
+            coinPos.x += distance.normalized.x * Time.deltaTime * speed * MAGNETSPEED;
+            coinPos.y += distance.normalized.y * Time.deltaTime * speed * MAGNETSPEED;
+            coin.position = coinPos;
+        }
+
+        if (coin.position.x < inScenePosX && coin.gameObject.activeSelf)
         {
             isInScene = true;
         }

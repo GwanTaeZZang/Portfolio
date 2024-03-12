@@ -59,15 +59,18 @@ public class ItemController
     {
 
         //SetRandomHeartPos(_floor);
+        SetRandomHeartPos(_floor);
+        SetRandomMagnetPos(_floor);
 
-        int percentage = GetRandomValue(SET_RANDOM_ITEM_MIN, SET_RANDOM_ITEM_MAX);
 
-        if (percentage == 0)
-        {
-            int type = GetRandomValue(SET_RANDOM_ITEM_TYPE_MIN, SET_RANDOM_ITEM_TYPE_MAX);
-            SetRandomHeartPos(_floor);
-            SetRandomMagnetPos(_floor);
-        }
+        //int percentage = GetRandomValue(SET_RANDOM_ITEM_MIN, SET_RANDOM_ITEM_MAX);
+
+        //if (percentage == 0)
+        //{
+        //    int type = GetRandomValue(SET_RANDOM_ITEM_TYPE_MIN, SET_RANDOM_ITEM_TYPE_MAX);
+        //    SetRandomHeartPos(_floor);
+        //    SetRandomMagnetPos(_floor);
+        //}
     }
 
     private void SetRandomHeartPos(Floor _floor)

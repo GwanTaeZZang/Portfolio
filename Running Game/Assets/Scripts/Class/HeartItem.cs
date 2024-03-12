@@ -25,6 +25,10 @@ public class HeartItem : Item
 
     public override void SetPosition(Floor _floor)
     {
+        width = heartSpriteRenderer.bounds.size.x;
+        height = heartSpriteRenderer.bounds.size.y;
+
+
         // 아이템 생성 위치를 바닥 사이로 지정했을 때 로직 
         //float between = _floor.GetBetween();
         //AABB floorAABB = _floor.GetAABB();

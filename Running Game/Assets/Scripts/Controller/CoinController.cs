@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -48,6 +47,7 @@ public class CoinController
     {
         MoveCoin();
         UpdateCollisionCoin();
+        MoveInMagnetRangeCoin();
     }
 
     private void CreateCoin(SpriteRenderer _coinSprite, Transform _parent, float _reposX, float _inScenePosX)
@@ -66,6 +66,38 @@ public class CoinController
         }
     }
 
+    private void MoveInMagnetRangeCoin()
+    {
+        if (player.IsMagnet())
+        {
+            for (int i = 0; i < coinListCount; i++)
+            {
+                Coin curCoin = coinList[i];
+
+                bool isInScene = curCoin.IsInScene();
+                if (isInScene)
+                {
+                    AABB coinAABB = curCoin.GetAABB();
+                    float coinPosX = coinAABB.pos.x;
+                    float coinPosY = coinAABB.pos.y;
+                    float coinWidth = coinAABB.width;
+                    float coinHeight = coinAABB.height;
+
+                    Vector2 playerPos = player.GetPlayerPos();
+                    int magnetRange = player.GetMagnetRange();
+
+                    if (coinPosX - coinWidth * CORRECTION_HALF < playerPos.x + magnetRange &&
+                        coinPosX + coinWidth * CORRECTION_HALF > playerPos.x - magnetRange &&
+                        coinPosY - coinHeight * CORRECTION_HALF < playerPos.y + magnetRange &&
+                        coinPosY + coinHeight * CORRECTION_HALF > playerPos.y - magnetRange)
+                    {
+                        Debug.Log("On Magnet Range");
+                        curCoin.MoveToTarget(player);
+                    }
+                }
+            }
+        }
+    }
 
     public void SetCoinPosition(Floor _floor, Obstacle _obstacle)
     {
@@ -201,7 +233,51 @@ public class CoinController
         }
     }
 
+    private void NomalCollisionCoinCalculation(Coin _coin)
+    {
+        AABB coinAABB = _coin.GetAABB();
+        float coinPosX = coinAABB.pos.x;
+        float coinPosY = coinAABB.pos.y;
+        float coinWidth = coinAABB.width;
+        float coinHeight = coinAABB.height;
 
+        if (coinPosX - coinWidth * CORRECTION_HALF < player.GetPlayerPos().x + CORRECTION_HALF &&
+            coinPosX + coinWidth * CORRECTION_HALF > player.GetPlayerPos().x - CORRECTION_HALF &&
+            coinPosY - coinHeight * CORRECTION_HALF < player.GetPlayerPos().y + CORRECTION_HALF &&
+            coinPosY + coinHeight * CORRECTION_HALF > player.GetPlayerPos().y - CORRECTION_HALF)
+        {
+            Debug.Log("Coin Collision~~~~~~~~~~~");
+
+            _coin.SetVisible(false);
+            _coin.SetIsInScene(false);
+
+            scoreAmount += (int)_coin.GetCoinType();
+            onScoreEvnet?.Invoke(scoreAmount);
+        }
+    }
+
+    private void MagnetItemCollisionCoinCalculation(Coin _coin)
+    {
+        AABB coinAABB = _coin.GetAABB();
+        float coinPosX = coinAABB.pos.x;
+        float coinPosY = coinAABB.pos.y;
+        float coinWidth = coinAABB.width;
+        float coinHeight = coinAABB.height;
+
+        if (coinPosX - coinWidth * CORRECTION_HALF < player.GetPlayerPos().x + CORRECTION_HALF &&
+            coinPosX + coinWidth * CORRECTION_HALF > player.GetPlayerPos().x - CORRECTION_HALF &&
+            coinPosY - coinHeight * CORRECTION_HALF < player.GetPlayerPos().y + CORRECTION_HALF &&
+            coinPosY + coinHeight * CORRECTION_HALF > player.GetPlayerPos().y - CORRECTION_HALF)
+        {
+            Debug.Log("Coin Collision~~~~~~~~~~~");
+
+            _coin.SetVisible(false);
+            _coin.SetIsInScene(false);
+
+            scoreAmount += (int)_coin.GetCoinType();
+            onScoreEvnet?.Invoke(scoreAmount);
+        }
+    }
 
     public int GetRandomValue(int _min, int _max)
     {

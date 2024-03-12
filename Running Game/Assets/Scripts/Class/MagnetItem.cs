@@ -23,6 +23,9 @@ public class MagnetItem : Item
 
     public override void SetPosition(Floor _floor)
     {
+        width = magnetSpriteRenderer.bounds.size.x;
+        height = magnetSpriteRenderer.bounds.size.y;
+
         // 아이템 생성 위치를 블럭 위로 지정했을 때 로직
         AABB floorAABB = _floor.GetAABB();
         float randomPosMin = (floorAABB.pos.x - floorAABB.width * HALF);
@@ -37,6 +40,8 @@ public class MagnetItem : Item
     public override void CollisionItem(Player _player)
     {
         Debug.Log("Collision Item Magnet");
+        // 임시 데이터 나중에 매니저한테 값 받아오게끔 변경
+        _player.SetMagnetEffect(true, 3,5f);
     }
 
 }

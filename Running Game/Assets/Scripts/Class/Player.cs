@@ -30,6 +30,11 @@ public class Player
     private float curGorundY;
     private float playerInterpolationY;
 
+    // Item Effect
+    private bool isMagnet;
+    private int magnetRange;
+    private float magnetTime;
+
     private Animator anim;
     private PlayerState playerState;
     private Vector2 curPos;
@@ -47,6 +52,9 @@ public class Player
         curGorundY = 0;
         curPos = player.position;
         playerRect = new Rect(curPos.x - 1 * 0.5f, curPos.y + 1 * 0.5f, 1, 1);
+
+        isMagnet = false;
+        magnetRange = 1;
     }
 
     public void UpdatePlayer()
@@ -54,12 +62,23 @@ public class Player
         if (Input.GetKeyDown("space") && !isJump)
         {
             Jump();
-
         }
         else if (Input.GetKeyDown("space") && isJump)
         {
             DoubleJump();
+        }
 
+
+
+        if (isMagnet)
+        {
+            magnetTime -= Time.deltaTime;
+            Debug.Log("자석 효과 진행중");
+            if(magnetTime < 0)
+            {
+                SetMagnetEffect(false, 1, 0);
+                Debug.Log("자석 효과 끝");
+            }
         }
     }
 
@@ -176,5 +195,22 @@ public class Player
     public int GetHp()
     {
         return hp;
+    }
+
+    public void SetMagnetEffect(bool _isMagnet, int _rangeValue, float _time)
+    {
+        isMagnet = _isMagnet;
+        magnetRange = _rangeValue;
+        magnetTime = _time;
+    }
+
+    public bool IsMagnet()
+    {
+        return isMagnet;
+    }
+    
+    public int GetMagnetRange()
+    {
+        return magnetRange;
     }
 }
