@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class HeartItem : Item
 {
+    // 나중에 아이템 매니저가 테이블 로드해서 들고 있을 데이터 초기화 할 때 적용시킬 데이터
+    private const int HEART_COEFFICIENT = 10;
+
     private SpriteRenderer heartSpriteRenderer;
 
 
@@ -54,7 +57,7 @@ public class HeartItem : Item
     public override void CollisionItem(Player _player)
     {
         ItemModel item = ItemManager.getInstance.GetItemModel(ITEM_TYPE.heart);
-        int hp = item.level / 10 + 1;
+        int hp = item.level / HEART_COEFFICIENT + 1;
         _player.SetHp(hp);
 
         Debug.Log("Collision Heart Item");

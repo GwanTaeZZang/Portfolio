@@ -4,6 +4,13 @@ using UnityEngine;
 
 public class MagnetItem : Item
 {
+    // 나중에 아이템 매니저가 테이블 로드해서 들고 있을 데이터 초기화 할 때 적용시킬 데이터
+    private const int MAGNET_RANGE_COEFFICIENT = 10;
+    private const int MAGNET_RANGE_DEFULT = 3;
+    private const int MAGENT_TIME_COEFFICIENT = 5;
+    private const int MAGENT_TIME_DEFULT = 4;
+
+
     private SpriteRenderer magnetSpriteRenderer;
 
     public override void Initialized(SpriteRenderer _item, Transform _parent, float _rePosX, float _inScenePosX)
@@ -40,8 +47,8 @@ public class MagnetItem : Item
     public override void CollisionItem(Player _player)
     {
         ItemModel item = ItemManager.getInstance.GetItemModel(ITEM_TYPE.magnet);
-        int range = item.level / 10 + 3;
-        float time = item.level + 4;
+        int range = item.level / MAGNET_RANGE_COEFFICIENT + MAGNET_RANGE_DEFULT;
+        float time = item.level/ MAGENT_TIME_COEFFICIENT + MAGENT_TIME_DEFULT;
         _player.SetMagnetEffect(true, range, time);
 
         Debug.Log("Collision Magnet Item");
