@@ -39,9 +39,16 @@ public class MagnetItem : Item
 
     public override void CollisionItem(Player _player)
     {
-        Debug.Log("Collision Item Magnet");
-        // 임시 데이터 나중에 매니저한테 값 받아오게끔 변경
-        _player.SetMagnetEffect(true, 3,5f);
+        ItemModel item = ItemManager.getInstance.GetItemModel(ITEM_TYPE.magnet);
+        int range = item.level / 10 + 3;
+        float time = item.level + 4;
+        _player.SetMagnetEffect(true, range, time);
+
+        Debug.Log("Collision Magnet Item");
+        Debug.Log("Magnet Item Level = " + item.level);
+        Debug.Log("Magnet Range = " + range);
+        Debug.Log("Magnet Time = " + time);
+
     }
 
 }

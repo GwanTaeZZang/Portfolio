@@ -181,13 +181,17 @@ public class Player
         if(hp + _amount > maxhp || hp + _amount < 0)
         {
             Debug.Log("체력이 가득 차거나 마이너스임  ");
-            return;
+            hp = maxhp;
         }
-        if(hp + _amount == 0)
+        else if(hp + _amount == 0)
         {
             Debug.Log("die");
+            
         }
-        hp += _amount;
+        else
+        {
+            hp += _amount;
+        }
 
         onObstacleCollisionEvent?.Invoke();
     }

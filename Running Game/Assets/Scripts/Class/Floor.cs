@@ -17,6 +17,7 @@ public class Floor
     private const int FLOOR_PART_LEFT = 0;
     private const int FLOOR_PART_MIDDLE = 1;
     private const int FLOOR_PART_RIGHT = 2;
+    private const float FLOOR_CORRECTION_HEIGHT = 0.5f;
 
     private Transform floor;
 
@@ -140,7 +141,7 @@ public class Floor
     }
     public Rect GetRect()
     {
-        floorRect.Set(curPos.x - width * HALF ,curPos.y + 1 * HALF ,width ,1);
+        floorRect.Set(curPos.x - width * HALF ,curPos.y + 1 * HALF ,width , FLOOR_CORRECTION_HEIGHT);
         return floorRect;
     }
 

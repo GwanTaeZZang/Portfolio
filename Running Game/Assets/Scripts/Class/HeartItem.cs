@@ -53,8 +53,14 @@ public class HeartItem : Item
 
     public override void CollisionItem(Player _player)
     {
-        Debug.Log("Collision Item");
-        _player.SetHp(1);
+        ItemModel item = ItemManager.getInstance.GetItemModel(ITEM_TYPE.heart);
+        int hp = item.level / 10 + 1;
+        _player.SetHp(hp);
+
+        Debug.Log("Collision Heart Item");
+        Debug.Log("Heart Item Level = " + item.level);
+        Debug.Log("HP Up = " + hp);
+
     }
 
 }

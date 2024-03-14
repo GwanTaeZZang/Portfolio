@@ -99,7 +99,7 @@ public class InGameSceneController : MonoBehaviour
 
         int playerHp = player.GetHp();
 
-        if(playerHp == 0)
+        if(playerHp == -1)
         {
             return;
         }
@@ -117,9 +117,13 @@ public class InGameSceneController : MonoBehaviour
         }
         else
         {
+            int increase = playerHp - curHeartCount;
             // 증가
-            curHeartCount++;
-            heartArr[curHeartCount - 1].color = onHeartColor;
+            for(int i =0; i < increase; i++)
+            {
+                curHeartCount++;
+                heartArr[curHeartCount - 1].color = onHeartColor;
+            }
         }
 
     }
