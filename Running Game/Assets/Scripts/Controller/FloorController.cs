@@ -232,6 +232,7 @@ public class FloorController
         {
             player.SetGroundPosY(NONE_GROUND_VALUE);
             player.SetIsGround(false);
+            //player.SetHp((int)NONE_GROUND_VALUE);
         }
     }
 

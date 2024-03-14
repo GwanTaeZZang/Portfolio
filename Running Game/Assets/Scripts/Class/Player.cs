@@ -14,8 +14,11 @@ public class Player
     private const float JUMP_POWER = 0.014f;
     private const float GRAVITY = 0.025f;
     private const float DOUBLE_JUMP_POWER = 0.9f;
+    private const int DEAD_POINT = -10;
+    private const float COLLISION_DLEAY_TIME = 2f;
 
     private Transform player;
+    private SpriteRenderer playerSpriteRenderer;
     private int maxhp;
     private int hp;
 
@@ -40,12 +43,19 @@ public class Player
     private Vector2 curPos;
     private Rect playerRect;
 
+    private bool hitAble;
+    private float DontCollisonTime;
+
+    private Color hitAbleColor;
+    private Color hitDisableColor;
+
     public Player(Transform _player, int _hp)
     {
         player = _player;
         //hp = _hp;
         maxhp = hp = _hp;
         anim = player.GetComponent<Animator>();
+        playerSpriteRenderer = player.GetComponent<SpriteRenderer>();
 
         isJump = false;
         isDoublejump = false;
@@ -54,7 +64,14 @@ public class Player
         playerRect = new Rect(curPos.x - 1 * 0.5f, curPos.y + 1 * 0.5f, 1, 1);
 
         isMagnet = false;
+        hitAble = true;
+        DontCollisonTime = COLLISION_DLEAY_TIME;
+
         magnetRange = 1;
+
+        ColorUtility.TryParseHtmlString("#FFFFFF", out hitAbleColor);
+        ColorUtility.TryParseHtmlString("#747474", out hitDisableColor);
+
     }
 
     public void UpdatePlayer()
@@ -73,11 +90,21 @@ public class Player
         if (isMagnet)
         {
             magnetTime -= Time.deltaTime;
-            Debug.Log("자석 효과 진행중");
             if(magnetTime < 0)
             {
                 SetMagnetEffect(false, 1, 0);
-                Debug.Log("자석 효과 끝");
+            }
+        }
+
+        if (!hitAble)
+        {
+            DontCollisonTime -= Time.deltaTime;
+            Debug.Log("무적상태 ");
+            if(DontCollisonTime < 0)
+            {
+                DontCollisonTime = COLLISION_DLEAY_TIME;
+                hitAble = true;
+                playerSpriteRenderer.color = hitAbleColor;
             }
         }
     }
@@ -125,6 +152,11 @@ public class Player
                 curPos.y = curGorundY;
                 player.transform.position = curPos;
                 curJumpPower = 0;
+            }
+
+            if(curPos.y < DEAD_POINT)
+            {
+                SetHp(-maxhp);
             }
         }
     }
@@ -178,15 +210,13 @@ public class Player
 
     public void SetHp(int _amount)
     {
-        if(hp + _amount > maxhp || hp + _amount < 0)
+        if(hp + _amount > maxhp)
         {
-            Debug.Log("체력이 가득 차거나 마이너스임  ");
             hp = maxhp;
         }
-        else if(hp + _amount == 0)
+        else if (hp + _amount <= 0)
         {
-            Debug.Log("die");
-            
+            hp = 0;
         }
         else
         {
@@ -216,5 +246,15 @@ public class Player
     public int GetMagnetRange()
     {
         return magnetRange;
+    }
+
+    public bool IsHit()
+    {
+        return hitAble;
+    }
+    public void OffHit()
+    {
+        hitAble = false;
+        playerSpriteRenderer.color = hitDisableColor;
     }
 }

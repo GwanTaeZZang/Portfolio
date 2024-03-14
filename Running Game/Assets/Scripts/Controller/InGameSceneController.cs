@@ -29,7 +29,7 @@ public class InGameSceneController : MonoBehaviour
     private Color offHeartColor;
     private Color onHeartColor;
 
-    
+    private bool isGameOver;
     
 
     private Camera myCamera;
@@ -56,6 +56,7 @@ public class InGameSceneController : MonoBehaviour
 
         player.onObstacleCollisionEvent = OnUpdateHeartUI;
 
+        isGameOver = false;
 
         ColorUtility.TryParseHtmlString("#FFFFFF", out onHeartColor);
         ColorUtility.TryParseHtmlString("#747474", out offHeartColor);
@@ -69,13 +70,16 @@ public class InGameSceneController : MonoBehaviour
     private void FixedUpdate()
     {
         //.. TODO :: Player RenderUpdate는 Update고 나머지는 왜 Fixed? 일치화 시켜야함  // correction
-        floorCtrl.FixedUpdateFloor();
-        obstacleCtrl.FixedObstacleUpdate();
-        coinCtrl.FixedUpdateCoin();
-        itemCtrl.FixedItemUpdate();
-        //..
+        if (!isGameOver)
+        {
+            floorCtrl.FixedUpdateFloor();
+            obstacleCtrl.FixedObstacleUpdate();
+            coinCtrl.FixedUpdateCoin();
+            itemCtrl.FixedItemUpdate();
+            //..
 
-        player.Gravity();
+            player.Gravity();
+        }
     }
 
     private void SetFloorEvent(Floor _floor)
@@ -109,6 +113,11 @@ public class InGameSceneController : MonoBehaviour
             // 감소
             heartArr[curHeartCount - 1].color = offHeartColor;
             curHeartCount--;
+
+            if(playerHp == 0)
+            {
+                isGameOver = true;
+            }
             //Debug.Log("플레이어 피 : " + playerHp);
         }
         else if(playerHp > heartArr.Length)
@@ -127,4 +136,6 @@ public class InGameSceneController : MonoBehaviour
         }
 
     }
+
+    
 }

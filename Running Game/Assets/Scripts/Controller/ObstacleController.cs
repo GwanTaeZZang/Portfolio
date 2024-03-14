@@ -152,7 +152,7 @@ public class ObstacleController
         {
             Obstacle curObstacle = obstacleList[i];
 
-            if (curObstacle.IsInScene())
+            if (curObstacle.IsInScene() && player.IsHit())
             {
                 AABB curObstacleAABB = curObstacle.GetAABB();
                 float obstaclePosX = curObstacleAABB.pos.x;
@@ -170,6 +170,7 @@ public class ObstacleController
                     curObstacle.SetIsInScene(false);
 
                     player.SetHp(-1);
+                    player.OffHit();
                     //onCollisionEvent?.Invoke();
                 }
 

@@ -27,7 +27,7 @@ public class ItemManager : Singleton<ItemManager>
             ItemModel model = new ItemModel();
             model.type = (ITEM_TYPE)i;
             model.level = 1;
-            model.price = 100;
+            model.price = 500;
             model.effectAmount = 1;
             itemList.Add(model);
         }
