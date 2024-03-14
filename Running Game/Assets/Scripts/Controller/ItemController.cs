@@ -12,7 +12,7 @@ public class ItemController
     private const int SET_RANDOM_ITEM_MAX = 10;
     private const int SET_RANDOM_ITEM_TYPE_MIN = 0;
     private const int SET_RANDOM_ITEM_TYPE_MAX = 3;
-    private const float CORRECTION_HALF = 0.3f;
+    private const float CORRECTION_HALF = 0.45f;
 
 
 
@@ -59,18 +59,18 @@ public class ItemController
     {
 
         //SetRandomHeartPos(_floor);
-        SetRandomHeartPos(_floor);
-        SetRandomMagnetPos(_floor);
+        //SetRandomHeartPos(_floor);
+        //SetRandomMagnetPos(_floor);
 
 
-        //int percentage = GetRandomValue(SET_RANDOM_ITEM_MIN, SET_RANDOM_ITEM_MAX);
+        int percentage = GetRandomValue(SET_RANDOM_ITEM_MIN, SET_RANDOM_ITEM_MAX);
 
-        //if (percentage == 0)
-        //{
-        //    int type = GetRandomValue(SET_RANDOM_ITEM_TYPE_MIN, SET_RANDOM_ITEM_TYPE_MAX);
-        //    SetRandomHeartPos(_floor);
-        //    SetRandomMagnetPos(_floor);
-        //}
+        if (percentage == 0)
+        {
+            int type = GetRandomValue(SET_RANDOM_ITEM_TYPE_MIN, SET_RANDOM_ITEM_TYPE_MAX);
+            SetRandomHeartPos(_floor);
+            SetRandomMagnetPos(_floor);
+        }
     }
 
     private void SetRandomHeartPos(Floor _floor)
@@ -112,10 +112,10 @@ public class ItemController
 
                 Vector2 playerPos = player.GetPlayerPos();
 
-                if (PosX - Width * HALF < playerPos.x + HALF &&
-                    PosX + Width * HALF > playerPos.x - HALF &&
-                    PosY - Height * HALF < playerPos.y + HALF &&
-                    PosY + Height * HALF > playerPos.y - HALF)
+                if (PosX - Width * HALF < playerPos.x + CORRECTION_HALF &&
+                    PosX + Width * HALF > playerPos.x - CORRECTION_HALF &&
+                    PosY - Height * HALF < playerPos.y + CORRECTION_HALF &&
+                    PosY + Height * HALF > playerPos.y - CORRECTION_HALF)
                 {
                     item.SetIsCollision(true);
                     item.SetVisible(false);
