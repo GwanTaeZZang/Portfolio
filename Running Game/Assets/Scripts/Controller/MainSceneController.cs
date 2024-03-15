@@ -11,6 +11,8 @@ public class MainSceneController : MonoBehaviour
 
     private void Awake()
     {
+        Application.targetFrameRate = 60;
+
         startGameBtn.onClick.AddListener(OnClickStartGameBtn);
         shopBtn.onClick.AddListener(OnClickShopBtn);
 
