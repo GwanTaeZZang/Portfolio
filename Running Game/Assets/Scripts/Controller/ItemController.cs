@@ -7,6 +7,7 @@ public class ItemController
     private const int CAPACITY = 10;
     private const int INIT_HEART_IDX = CAPACITY * 0;
     private const int INIT_MAGNET_IDX = CAPACITY * 1;
+    private const int INIT_INVINCIBLE_IDX = CAPACITY * 2;
     private const float HALF = 0.5f;
     private const int SET_RANDOM_ITEM_MIN = 0;
     private const int SET_RANDOM_ITEM_MAX = 10;
@@ -21,20 +22,24 @@ public class ItemController
 
     private SpriteRenderer heartItmeSpriteRenderer;
     private SpriteRenderer magnetItmeSpriteRenderer;
+    private SpriteRenderer invincibleItemSpriteRenderer;
     private int setHeartIdx = INIT_HEART_IDX;
     private int setMagnetIdx = INIT_MAGNET_IDX;
+    private int setInvincibleIdx = INIT_INVINCIBLE_IDX;
     private int itemListCount;
 
     public ItemController(Transform _parent, Player _player, float _reposX, float _inScenePosX)
     {
         itemList = new List<Item>();
         player = _player;
-
+        
         heartItmeSpriteRenderer = Resources.Load<SpriteRenderer>("Prefab/Item/Heart");
         magnetItmeSpriteRenderer = Resources.Load<SpriteRenderer>("Prefab/Item/Magnet");
+        invincibleItemSpriteRenderer = Resources.Load<SpriteRenderer>("Prefab/Item/InvincibleItem");
 
         CreateItem<HeartItem>(heartItmeSpriteRenderer, _parent, _reposX, _inScenePosX);
         CreateItem<MagnetItem>(magnetItmeSpriteRenderer, _parent, _reposX, _inScenePosX);
+        CreateItem<InvincibleItem>(invincibleItemSpriteRenderer, _parent, _reposX, _inScenePosX);
 
         itemListCount = itemList.Count;
     }
@@ -76,6 +81,11 @@ public class ItemController
             {
                 SetRandomMagnetPos(_floor);
             }
+            if(type == 2)
+            {
+                Debug.Log("ㅁㅜ적 아이템 생");
+                SetRandomInvinciblePos(_floor);
+            }
         }
     }
 
@@ -91,7 +101,12 @@ public class ItemController
         setMagnetIdx++;
         setMagnetIdx = (setMagnetIdx % CAPACITY) + INIT_MAGNET_IDX;
     }
-
+    private void SetRandomInvinciblePos(Floor _floor)
+    {
+        itemList[setInvincibleIdx].SetPosition(_floor);
+        setInvincibleIdx++;
+        setInvincibleIdx = (setInvincibleIdx % CAPACITY) + INIT_INVINCIBLE_IDX;
+    }
 
 
     private void MoveItem()

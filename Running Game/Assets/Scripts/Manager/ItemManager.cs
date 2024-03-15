@@ -13,6 +13,7 @@ public enum ITEM_TYPE
 {
     heart = 0,
     magnet = 1,
+    invincible = 2,
     count,
 }
 public class ItemManager : Singleton<ItemManager>

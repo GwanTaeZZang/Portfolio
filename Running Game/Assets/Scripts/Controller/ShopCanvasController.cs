@@ -31,6 +31,7 @@ public class ShopCanvasController : UIBaseController
 
         UpdateItemElement(ItemManager.getInstance.GetItemModel(ITEM_TYPE.heart), ITEM_TYPE.heart);
         UpdateItemElement(ItemManager.getInstance.GetItemModel(ITEM_TYPE.magnet), ITEM_TYPE.magnet);
+        UpdateItemElement(ItemManager.getInstance.GetItemModel(ITEM_TYPE.invincible), ITEM_TYPE.invincible);
     }
 
     private void ButtonEventBinding()

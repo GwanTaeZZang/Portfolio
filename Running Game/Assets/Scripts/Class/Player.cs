@@ -44,7 +44,7 @@ public class Player
     private Rect playerRect;
 
     private bool hitAble;
-    private float DontCollisonTime;
+    private float invincibleTime;
 
     private Color hitAbleColor;
     private Color hitDisableColor;
@@ -65,7 +65,7 @@ public class Player
 
         isMagnet = false;
         hitAble = true;
-        DontCollisonTime = COLLISION_DLEAY_TIME;
+        invincibleTime = COLLISION_DLEAY_TIME;
 
         magnetRange = 1;
 
@@ -98,11 +98,11 @@ public class Player
 
         if (!hitAble)
         {
-            DontCollisonTime -= Time.deltaTime;
+            invincibleTime -= Time.deltaTime;
             Debug.Log("무적상태 ");
-            if(DontCollisonTime < 0)
+            if(invincibleTime < 0)
             {
-                DontCollisonTime = COLLISION_DLEAY_TIME;
+                invincibleTime = COLLISION_DLEAY_TIME;
                 hitAble = true;
                 playerSpriteRenderer.color = hitAbleColor;
             }
@@ -236,6 +236,12 @@ public class Player
         isMagnet = _isMagnet;
         magnetRange = _rangeValue;
         magnetTime = _time;
+    }
+
+    public void SetInvincibleEffect(float _time)
+    {
+        OffHit();
+        invincibleTime = _time;
     }
 
     public bool IsMagnet()
