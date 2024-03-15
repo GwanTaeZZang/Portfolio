@@ -117,6 +117,8 @@ public class InGameSceneController : MonoBehaviour
             if(playerHp == 0)
             {
                 isGameOver = true;
+                var canvas = UIManager.getInstance.Show<GameOverCanvasController>("Prefab/Canvas/GameOverCanvas");
+                canvas.UpdateResult();
             }
             //Debug.Log("플레이어 피 : " + playerHp);
         }

@@ -221,7 +221,7 @@ public class CoinController
                     coinPosY - coinHeight * CORRECTION_HALF < player.GetPlayerPos().y + CORRECTION_HALF &&
                     coinPosY + coinHeight * CORRECTION_HALF > player.GetPlayerPos().y - CORRECTION_HALF)
                 {
-                    Debug.Log("Coin Collision~~~~~~~~~~~");
+                    //Debug.Log("Coin Collision~~~~~~~~~~~");
 
                     curCoin.SetVisible(false);
                     curCoin.SetIsInScene(false);

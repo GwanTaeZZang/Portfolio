@@ -165,7 +165,7 @@ public class ObstacleController
                     obstaclePosY - obstacleHeight * HALF < player.GetPlayerPos().y + CORRECTION_HALF &&
                     obstaclePosY + obstacleHeight * HALF > player.GetPlayerPos().y - CORRECTION_HALF)
                 {
-                    Debug.Log("Collision~~~~~~~~~~~");
+                    //Debug.Log("Collision~~~~~~~~~~~");
                     curObstacle.SetIsCollision(true);
                     curObstacle.SetIsInScene(false);
 

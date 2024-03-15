@@ -99,7 +99,7 @@ public class Player
         if (!hitAble)
         {
             invincibleTime -= Time.deltaTime;
-            Debug.Log("무적상태 ");
+            //Debug.Log("무적상태 ");
             if(invincibleTime < 0)
             {
                 invincibleTime = COLLISION_DLEAY_TIME;

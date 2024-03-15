@@ -21,6 +21,7 @@ public class MainSceneController : MonoBehaviour
     {
         Debug.Log("start Game");
         SceneManager.LoadScene("InGameScene");
+        UIManager.getInstance.Clear();
     }
     private void OnClickShopBtn()
     {

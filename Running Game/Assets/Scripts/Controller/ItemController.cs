@@ -83,7 +83,7 @@ public class ItemController
             }
             if(type == 2)
             {
-                Debug.Log("ㅁㅜ적 아이템 생");
+                //Debug.Log("ㅁㅜ적 아이템 생");
                 SetRandomInvinciblePos(_floor);
             }
         }

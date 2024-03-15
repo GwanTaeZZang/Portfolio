@@ -60,4 +60,9 @@ public class UIManager : Singleton<UIManager>
         _controller.SetCanvasSortingOrder((UIStack.Count * LAYER_INCREASE) + BASE_LAYER_AMOUNT);
     }
 
+    public void Clear()
+    {
+        UIList.Clear();
+        UIStack.Clear();
+    }
 }
