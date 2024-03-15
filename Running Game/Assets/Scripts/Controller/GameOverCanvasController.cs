@@ -15,6 +15,12 @@ public class GameOverCanvasController : UIBaseController
         confirmBtn.onClick.AddListener(OnClickConfirmBtn);
     }
 
+    public override void Show()
+    {
+        base.Show();
+        UpdateResult();
+    }
+
     private void OnClickConfirmBtn()
     {
         Hide();
@@ -25,6 +31,7 @@ public class GameOverCanvasController : UIBaseController
 
     public void UpdateResult()
     {
-
+        scoreAmount.text = ScoreManager.getInstance.GetScore().ToString();
+        coinAmount.text = ScoreManager.getInstance.GetResultCoin().ToString();
     }
 }

@@ -226,8 +226,8 @@ public class CoinController
                     curCoin.SetVisible(false);
                     curCoin.SetIsInScene(false);
 
-                    scoreAmount += (int)curCoin.GetCoinType();
-                    onScoreEvnet?.Invoke(scoreAmount);
+                    //scoreAmount += (int)curCoin.GetCoinType();
+                    onScoreEvnet?.Invoke((int)curCoin.GetCoinType());
                 }
             }
         }

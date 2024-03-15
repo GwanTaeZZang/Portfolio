@@ -19,13 +19,13 @@ public abstract class UIBaseController : MonoBehaviour
 
     protected abstract void Initialized();
 
-    public void Show()
+    public virtual void Show()
     {
         myCanvas.enabled = true;
         isShow = true;
     }
 
-    public void Hide()
+    public virtual void Hide()
     {
         myCanvas.enabled = false;
         isShow = false;

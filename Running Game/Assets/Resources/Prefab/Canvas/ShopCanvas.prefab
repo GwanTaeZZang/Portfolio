@@ -871,6 +871,7 @@ MonoBehaviour:
   - {fileID: 3694571319434948846}
   - {fileID: 1943551386428458839}
   - {fileID: 7301348599929519280}
+  coineAmountText: {fileID: 2366738043381142467}
 --- !u!1 &4138820865240587705
 GameObject:
   m_ObjectHideFlags: 0

@@ -30,7 +30,7 @@ public class InGameSceneController : MonoBehaviour
     private Color onHeartColor;
 
     private bool isGameOver;
-    
+    private int oneGameTotalScore;
 
     private Camera myCamera;
     private void Awake()
@@ -95,8 +95,10 @@ public class InGameSceneController : MonoBehaviour
 
     private void OnUpdateScoreText(int _score)
     {
-        scoreAmount.text = _score.ToString();
+        oneGameTotalScore += _score;
+        scoreAmount.text = oneGameTotalScore.ToString();
     }
+
     private void OnUpdateHeartUI()
     {
         // 줄일 수 있을거 같음 나중에 다시확인
@@ -116,9 +118,7 @@ public class InGameSceneController : MonoBehaviour
 
             if(playerHp == 0)
             {
-                isGameOver = true;
-                var canvas = UIManager.getInstance.Show<GameOverCanvasController>("Prefab/Canvas/GameOverCanvas");
-                canvas.UpdateResult();
+                GameOver();
             }
             //Debug.Log("플레이어 피 : " + playerHp);
         }
@@ -139,5 +139,13 @@ public class InGameSceneController : MonoBehaviour
 
     }
 
-    
+    private void GameOver()
+    {
+        isGameOver = true;
+        ScoreManager.getInstance.SetScore(oneGameTotalScore);
+
+        var canvas = UIManager.getInstance.Show<GameOverCanvasController>("Prefab/Canvas/GameOverCanvas");
+        canvas.UpdateResult();
+
+    }
 }
