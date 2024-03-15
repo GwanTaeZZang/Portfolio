@@ -17,9 +17,9 @@ public class ShopCanvasController : UIBaseController
         closeBtn.onClick.AddListener(OnClickCloseBtn);
         ButtonEventBinding();
 
-        UpdateItemElement(ItemManager.getInstance.GetItemModel(ITEM_TYPE.heart), ITEM_TYPE.heart);
-        UpdateItemElement(ItemManager.getInstance.GetItemModel(ITEM_TYPE.magnet), ITEM_TYPE.magnet);
-        UpdateItemElement(ItemManager.getInstance.GetItemModel(ITEM_TYPE.invincible), ITEM_TYPE.invincible);
+        //UpdateItemElement(ItemManager.getInstance.GetItemModel(ITEM_TYPE.heart), ITEM_TYPE.heart);
+        //UpdateItemElement(ItemManager.getInstance.GetItemModel(ITEM_TYPE.magnet), ITEM_TYPE.magnet);
+        //UpdateItemElement(ItemManager.getInstance.GetItemModel(ITEM_TYPE.invincible), ITEM_TYPE.invincible);
     }
 
     public override void Show()
@@ -27,6 +27,7 @@ public class ShopCanvasController : UIBaseController
         base.Show();
 
         UpdateCoinAmount();
+
         UpdateItemElement(ItemManager.getInstance.GetItemModel(ITEM_TYPE.heart), ITEM_TYPE.heart);
         UpdateItemElement(ItemManager.getInstance.GetItemModel(ITEM_TYPE.magnet), ITEM_TYPE.magnet);
         UpdateItemElement(ItemManager.getInstance.GetItemModel(ITEM_TYPE.invincible), ITEM_TYPE.invincible);

@@ -24,6 +24,9 @@ public abstract class Item
     protected SpriteRenderer itemSpriteRenderer;
 
     public abstract void Initialized(SpriteRenderer _item, Transform _parent, float _rePosX, float _inScenePosX);
+    public abstract void CollisionItem(Player _player);
+
+
     public virtual void SetPosition(Floor _floor)
     {
         width = itemSpriteRenderer.bounds.size.x;
@@ -40,7 +43,6 @@ public abstract class Item
         SetVisible(true);
 
     }
-    public abstract void CollisionItem(Player _player);
 
     public virtual void Move()
     {

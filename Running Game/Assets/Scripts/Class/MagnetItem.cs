@@ -11,16 +11,16 @@ public class MagnetItem : Item
     private const int MAGENT_TIME_DEFULT = 4;
 
 
-    private SpriteRenderer magnetSpriteRenderer;
+    //private SpriteRenderer magnetSpriteRenderer;
 
     public override void Initialized(SpriteRenderer _item, Transform _parent, float _rePosX, float _inScenePosX)
     {
-        magnetSpriteRenderer = GameObject.Instantiate<SpriteRenderer>(_item, _parent);
-        item = magnetSpriteRenderer.transform;
+        itemSpriteRenderer = GameObject.Instantiate<SpriteRenderer>(_item, _parent);
+        item = itemSpriteRenderer.transform;
         itemPos = new Vector2(CREATE_POS_X, CREATE_POS_Y);
         item.position = itemPos;
 
-        speed = magnetSpriteRenderer.sortingOrder;
+        speed = itemSpriteRenderer.sortingOrder;
         repositionX = _rePosX;
         inScenePosX = _inScenePosX;
         isCollision = false;
@@ -28,21 +28,21 @@ public class MagnetItem : Item
         SetVisible(false);
     }
 
-    public override void SetPosition(Floor _floor)
-    {
-        width = magnetSpriteRenderer.bounds.size.x;
-        height = magnetSpriteRenderer.bounds.size.y;
+    //public override void SetPosition(Floor _floor)
+    //{
+    //    width = magnetSpriteRenderer.bounds.size.x;
+    //    height = magnetSpriteRenderer.bounds.size.y;
 
-        // 아이템 생성 위치를 블럭 위로 지정했을 때 로직
-        AABB floorAABB = _floor.GetAABB();
-        float randomPosMin = (floorAABB.pos.x - floorAABB.width * HALF);
-        float randomPosMax = (floorAABB.pos.x + floorAABB.width * HALF);
+    //    // 아이템 생성 위치를 블럭 위로 지정했을 때 로직
+    //    AABB floorAABB = _floor.GetAABB();
+    //    float randomPosMin = (floorAABB.pos.x - floorAABB.width * HALF);
+    //    float randomPosMax = (floorAABB.pos.x + floorAABB.width * HALF);
 
-        itemPos.x = GetRandomValue(randomPosMin, randomPosMax);
-        itemPos.y = floorAABB.pos.y + ITEM_POSY;
+    //    itemPos.x = GetRandomValue(randomPosMin, randomPosMax);
+    //    itemPos.y = floorAABB.pos.y + ITEM_POSY;
 
-        SetVisible(true);
-    }
+    //    SetVisible(true);
+    //}
 
     public override void CollisionItem(Player _player)
     {
@@ -51,10 +51,10 @@ public class MagnetItem : Item
         float time = item.level/ MAGENT_TIME_COEFFICIENT + MAGENT_TIME_DEFULT;
         _player.SetMagnetEffect(true, range, time);
 
-        Debug.Log("Collision Magnet Item");
-        Debug.Log("Magnet Item Level = " + item.level);
-        Debug.Log("Magnet Range = " + range);
-        Debug.Log("Magnet Time = " + time);
+        //Debug.Log("Collision Magnet Item");
+        //Debug.Log("Magnet Item Level = " + item.level);
+        //Debug.Log("Magnet Range = " + range);
+        //Debug.Log("Magnet Time = " + time);
 
     }
 

@@ -7,7 +7,8 @@ public class ItemModel
     public ITEM_TYPE type;
     public int level;
     public int price;
-    public float effectAmount;
+    //public int effectDefult;
+    //public int effectCoefficient;
 }
 public enum ITEM_TYPE
 {
@@ -25,6 +26,7 @@ public class ItemManager : Singleton<ItemManager>
         itemList = new List<ItemModel>();
         for(int i =0; i < (int)ITEM_TYPE.count; i++)
         {
+            // 더미 데이터 넣는중 
             ItemModel model = new ItemModel();
             model.type = (ITEM_TYPE)i;
             model.level = PlayerPrefs.GetInt(model.type.ToString());
@@ -32,10 +34,12 @@ public class ItemManager : Singleton<ItemManager>
             {
                 model.level = 1;
             }
+
             model.price = 500;
-            model.effectAmount = 1;
             itemList.Add(model);
         }
+
+
 
         Debug.Log("아이템 매니저 초기화 완료 ");
         return base.Initialize();

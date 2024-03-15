@@ -9,16 +9,16 @@ public class InvincibleItem : Item
     private const int INVINCIBLE_TIME_DEFULT = 5;
 
 
-    private SpriteRenderer invincibleItemSpriteRenderer;
+    //private SpriteRenderer invincibleItemSpriteRenderer;
 
     public override void Initialized(SpriteRenderer _item, Transform _parent, float _rePosX, float _inScenePosX)
     {
-        invincibleItemSpriteRenderer = GameObject.Instantiate<SpriteRenderer>(_item, _parent);
-        item = invincibleItemSpriteRenderer.transform;
+        itemSpriteRenderer = GameObject.Instantiate<SpriteRenderer>(_item, _parent);
+        item = itemSpriteRenderer.transform;
         itemPos = new Vector2(CREATE_POS_X, CREATE_POS_Y);
         item.position = itemPos;
 
-        speed = invincibleItemSpriteRenderer.sortingOrder;
+        speed = itemSpriteRenderer.sortingOrder;
         repositionX = _rePosX;
         inScenePosX = _inScenePosX;
         isCollision = false;
@@ -26,21 +26,21 @@ public class InvincibleItem : Item
         SetVisible(false);
     }
 
-    public override void SetPosition(Floor _floor)
-    {
-        width = invincibleItemSpriteRenderer.bounds.size.x;
-        height = invincibleItemSpriteRenderer.bounds.size.y;
+    //public override void SetPosition(Floor _floor)
+    //{
+    //    width = invincibleItemSpriteRenderer.bounds.size.x;
+    //    height = invincibleItemSpriteRenderer.bounds.size.y;
 
-        // 아이템 생성 위치를 블럭 위로 지정했을 때 로직
-        AABB floorAABB = _floor.GetAABB();
-        float randomPosMin = (floorAABB.pos.x - floorAABB.width * HALF);
-        float randomPosMax = (floorAABB.pos.x + floorAABB.width * HALF);
+    //    // 아이템 생성 위치를 블럭 위로 지정했을 때 로직
+    //    AABB floorAABB = _floor.GetAABB();
+    //    float randomPosMin = (floorAABB.pos.x - floorAABB.width * HALF);
+    //    float randomPosMax = (floorAABB.pos.x + floorAABB.width * HALF);
 
-        itemPos.x = GetRandomValue(randomPosMin, randomPosMax);
-        itemPos.y = floorAABB.pos.y + ITEM_POSY;
+    //    itemPos.x = GetRandomValue(randomPosMin, randomPosMax);
+    //    itemPos.y = floorAABB.pos.y + ITEM_POSY;
 
-        SetVisible(true);
-    }
+    //    SetVisible(true);
+    //}
 
     public override void CollisionItem(Player _player)
     {
@@ -48,7 +48,7 @@ public class InvincibleItem : Item
         float time = item.level / INVINCIBLE_TIME_COEFFICIENT + INVINCIBLE_TIME_DEFULT;
         _player.SetInvincibleEffect(time);
 
-        Debug.Log("무적 아이템 먹음 ");
+        //Debug.Log("무적 아이템 먹음 ");
     }
 
 }
