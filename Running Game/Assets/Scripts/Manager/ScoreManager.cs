@@ -13,7 +13,7 @@ public class ScoreManager : Singleton<ScoreManager>
     {
         coinCoefficient = 10;
         score = 0;
-        totalCoin = 0;
+        totalCoin = PlayerPrefs.GetInt("TotalCoin");
         return base.Initialize();
     }
 
@@ -47,12 +47,14 @@ public class ScoreManager : Singleton<ScoreManager>
         }
 
         totalCoin -= _amount;
+        PlayerPrefs.SetInt("TotalCoin", totalCoin);
         return true;
     }
 
     private void CoinCalculate()
     {
         totalCoin += resultCoin;
+        PlayerPrefs.SetInt("TotalCoin", totalCoin);
     }
 
 

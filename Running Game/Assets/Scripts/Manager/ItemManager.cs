@@ -27,7 +27,11 @@ public class ItemManager : Singleton<ItemManager>
         {
             ItemModel model = new ItemModel();
             model.type = (ITEM_TYPE)i;
-            model.level = 1;
+            model.level = PlayerPrefs.GetInt(model.type.ToString());
+            if(model.level == 0)
+            {
+                model.level = 1;
+            }
             model.price = 500;
             model.effectAmount = 1;
             itemList.Add(model);
@@ -37,10 +41,12 @@ public class ItemManager : Singleton<ItemManager>
         return base.Initialize();
     }
 
-    public ItemModel ItemLevelUp(ITEM_TYPE _tpye)
+    public ItemModel ItemLevelUp(ITEM_TYPE _type)
     {
-        ItemModel model = itemList[(int)_tpye];
+        ItemModel model = itemList[(int)_type];
         model.level++;
+
+        PlayerPrefs.SetInt(_type.ToString(), model.level);
 
         return model;
     }
