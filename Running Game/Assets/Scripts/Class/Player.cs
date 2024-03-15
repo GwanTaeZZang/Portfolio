@@ -263,4 +263,9 @@ public class Player
         hitAble = false;
         playerSpriteRenderer.color = hitDisableColor;
     }
+
+    public bool IsJump()
+    {
+        return isJump;
+    }
 }

@@ -14,6 +14,7 @@ public class InGameSceneController : MonoBehaviour
     // View
     [SerializeField] private Text scoreAmount;
     [SerializeField] private Image[] heartArr;
+    [SerializeField] private Button jumpBtn;
 
     private FloorController floorCtrl;
     private ObstacleController obstacleCtrl;
@@ -57,6 +58,8 @@ public class InGameSceneController : MonoBehaviour
         player.onObstacleCollisionEvent = OnUpdateHeartUI;
 
         isGameOver = false;
+
+        jumpBtn.onClick.AddListener(OnClickJumpBtn);
 
         ColorUtility.TryParseHtmlString("#FFFFFF", out onHeartColor);
         ColorUtility.TryParseHtmlString("#747474", out offHeartColor);
@@ -137,6 +140,18 @@ public class InGameSceneController : MonoBehaviour
             }
         }
 
+    }
+
+    private void OnClickJumpBtn()
+    {
+        if (player.IsJump())
+        {
+            player.DoubleJump();
+        }
+        else
+        {
+            player.Jump();
+        }
     }
 
     private void GameOver()
